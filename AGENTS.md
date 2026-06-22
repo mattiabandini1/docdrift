@@ -42,7 +42,7 @@ con il codice sorgente. Quando una Pull Request viene mergiata su GitHub, DocDri
 docdrift/
 ├── AGENTS.md                  ← questo file, leggilo sempre
 ├── ROADMAP.md                 ← piano di sviluppo per fasi
-├── .env.example               ← variabili d'ambiente necessarie (mai committare .env)
+├── .env.local                 ← variabili d'ambiente necessarie (mai committare .env)
 ├── app/                       ← Next.js App Router
 │   ├── (auth)/                ← pagine di autenticazione
 │   ├── (dashboard)/           ← area loggata: repos, impostazioni, preview
@@ -136,7 +136,7 @@ Salva log dell'operazione su Supabase (tabella doc_updates)
 
 ## 6. Variabili d'ambiente
 
-Tutte le variabili necessarie sono in `.env.example`. Prima di qualsiasi operazione che
+Tutte le variabili necessarie sono in `.env.local`. Prima di qualsiasi operazione che
 richiede connessioni esterne, verifica che le variabili siano definite.
 
 **Non committare mai:**
