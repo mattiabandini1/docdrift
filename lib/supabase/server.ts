@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 /**
@@ -35,4 +36,24 @@ export async function createClient() {
       },
     }
   );
+}
+
+/**
+ * Creates a Supabase client using the service role key, which bypasses
+ * Row Level Security. Only use this in server-side contexts that need
+ * unrestricted database access (e.g., webhooks, background jobs).
+ *
+ * @returns A Supabase client authenticated with the service role key.
+ */
+export function createServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      "Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY"
+    );
+  }
+
+  return createSupabaseClient(url, key);
 }

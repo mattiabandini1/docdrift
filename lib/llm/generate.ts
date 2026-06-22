@@ -1,15 +1,16 @@
-import {
-  GoogleGenerativeAI,
-  GoogleGenerativeAIFetchError,
-} from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { buildPrompt, SYSTEM_PROMPT, type PromptParams } from "./prompts";
 
 /** The Gemini model ID to use for documentation generation. */
-export const MODEL = "gemini-2.5-flash";
+export const MODEL = "gemini-2.5-flash-lite";
 
 export type GenerateParams = PromptParams;
 
 export type GenerateResult = string | null;
+
+interface GenAIError extends Error {
+  status?: number;
+}
 
 /**
  * Calls the Gemini LLM to generate an updated documentation section from
@@ -27,25 +28,27 @@ export async function generateDocUpdate(
     throw new Error("LLM_UNAVAILABLE: Missing required environment variable: GEMINI_API_KEY");
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: MODEL,
-    systemInstruction: SYSTEM_PROMPT,
-  });
+  const client = new GoogleGenAI({ apiKey });
 
   const prompt = buildPrompt(params);
 
   let text: string;
 
   try {
-    const result = await model.generateContent(prompt);
-    text = result.response.text().trim();
+    const result = await client.models.generateContent({
+      model: MODEL,
+      contents: prompt,
+      config: {
+        systemInstruction: SYSTEM_PROMPT,
+      },
+    });
+    text = result.text?.trim() ?? "";
   } catch (error) {
-    if (error instanceof GoogleGenerativeAIFetchError) {
-      if (error.status === 429) {
-        throw new Error("LLM_RATE_LIMITED");
-      }
-      throw new Error("LLM_UNAVAILABLE: " + error.message);
+    if (
+      error instanceof Error &&
+      (error as GenAIError).status === 429
+    ) {
+      throw new Error("LLM_RATE_LIMITED");
     }
 
     if (error instanceof Error && error.message.startsWith("LLM_")) {
@@ -55,7 +58,7 @@ export async function generateDocUpdate(
     console.error("LLM generation error:", error);
     throw new Error(
       "LLM_UNAVAILABLE: " +
-        (error instanceof Error ? error.message : "Unknown error")
+      (error instanceof Error ? error.message : "Unknown error")
     );
   }
 

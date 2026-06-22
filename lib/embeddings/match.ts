@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 /** Represents a section of a markdown document split by level-2 heading. */
 export type DocSection = {
@@ -18,7 +18,7 @@ export type MatchResult = {
   similarity: number;
 };
 
-const EMBEDDING_MODEL = "text-embedding-004";
+const EMBEDDING_MODEL = "gemini-embedding-001";
 const MAX_EMBEDDING_CHARS = 8000;
 const SIMILARITY_THRESHOLD = 0.25;
 const MAX_RESULTS = 3;
@@ -109,30 +109,25 @@ export function cosineSimilarity(a: number[], b: number[]): number {
  * Generates an embedding vector for the given text using Google's embedding model.
  *
  * @param text - The text to embed.
- * @param client - An initialized GoogleGenerativeAI client.
+ * @param client - An initialized GoogleGenAI client.
  * @returns A numeric embedding vector.
  */
 export async function getEmbedding(
   text: string,
-  client: GoogleGenerativeAI
+  client: GoogleGenAI
 ): Promise<number[]> {
-  const truncatedText = text.slice(0, MAX_EMBEDDING_CHARS);
+  const response = await client.models.embedContent({
+    model: EMBEDDING_MODEL,
+    contents: text.slice(0, MAX_EMBEDDING_CHARS),
+  });
 
-  try {
-    const model = client.getGenerativeModel({ model: EMBEDDING_MODEL });
-    const result = await model.embedContent(truncatedText);
+  const values = response.embeddings?.[0].values;
 
-    const values = result.embedding.values;
-
-    if (!values || values.length === 0) {
-      throw new Error("Empty embedding response");
-    }
-
-    return values;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    throw new Error("EMBEDDING_FAILED: " + message);
+  if (!values || values.length === 0) {
+    throw new Error("EMBEDDING_FAILED: Empty embedding response");
   }
+
+  return values;
 }
 
 /**
@@ -152,7 +147,7 @@ export async function findImpactedSections(
     throw new Error("EMBEDDING_FAILED: Missing required environment variable: GEMINI_API_KEY");
   }
 
-  const client = new GoogleGenerativeAI(apiKey);
+  const client = new GoogleGenAI({ apiKey });
   const sections = splitIntoSections(docContent);
 
   if (sections.length === 1) {
