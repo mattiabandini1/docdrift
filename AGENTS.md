@@ -17,7 +17,7 @@ con il codice sorgente. Quando una Pull Request viene mergiata su GitHub, DocDri
 
 **Utente target:** team di sviluppo da 2–15 persone, indie developer con prodotti SaaS attivi.
 **Pain point risolto:** la documentazione che diventa obsoleta dopo ogni merge.
-**Modello di business:** SaaS con abbonamento mensile ($29/mese per 1 repo, $79/mese illimitati).
+**Modello di business:** SaaS con abbonamento mensile ($12/mese per 3 repo, $29/mese illimitati).
 
 ---
 

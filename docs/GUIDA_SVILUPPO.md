@@ -3,7 +3,7 @@
 **Prodotto:** DocDrift — Auto-sync della documentazione da GitHub PR  
 **Stack:** Next.js 14 + Supabase + Anthropic API + Stripe  
 **Obiettivo:** $1.000 MRR entro 8 settimane dal lancio  
-**Modello:** $29/mese (Starter, 1 repo) · $79/mese (Pro, repo illimitati)
+**Modello:** $12/mese (Starter, 3 repos) · $29/mese (Pro, repo illimitati)
 
 ---
 
@@ -364,16 +364,16 @@ Il frontend è la parte dove i modelli open source di OpenCode Go brillano di pi
 
 ### Stripe setup
 - [ ] Crea prodotti Stripe in modalità test:
-  - "DocDrift Starter" → $29/mese → salva `price_id` in `.env`
-  - "DocDrift Pro" → $79/mese → salva `price_id` in `.env`
+  - "DocDrift Starter" → $12/mese → salva `price_id` in `.env`
+  - "DocDrift Pro" → $29/mese → salva `price_id` in `.env`
 - [ ] Installa `stripe` SDK
 - [ ] Crea `lib/stripe/client.ts`
 
 ### Pagina pricing (`/pricing`)
 - [ ] Pagina pubblica con confronto piani
 - [ ] Free tier: 1 repo, max 10 aggiornamenti/mese
-- [ ] Starter $29/mese: 1 repo, illimitati
-- [ ] Pro $79/mese: repo illimitati, priority support
+- [ ] Starter $12/mese: 3 repo, illimitati
+- [ ] Pro $29/mese: repo illimitati, priority support
 - [ ] CTA "Start free trial" (7 giorni, richiede carta)
 
 ### Checkout flow

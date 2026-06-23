@@ -17,7 +17,7 @@ automaticamente una PR di documentazione aggiornata ogni volta che mergia una PR
 - Generazione doc con Claude API
 - Apertura PR automatica sul repo dell'utente
 - Dashboard minimale (lista repo, activity log)
-- Pagamenti Stripe (Starter $29/mo, Pro $79/mo)
+- Pagamenti Stripe (Starter $12/mo, Pro $29/mo)
 - Email notifiche con Resend
 - Homepage pubblica
 
