@@ -1,10 +1,347 @@
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Activity } from "lucide-react";
+import { timeAgo } from "@/lib/utils";
+
+const STATUSES = [
+  { value: "", label: "All" },
+  { value: "generated", label: "Generated" },
+  { value: "skipped", label: "Skipped" },
+  { value: "error", label: "Error" },
+  { value: "pending", label: "Pending" },
+] as const;
+
+const PAGE_SIZE = 20;
+
+interface ActivityItem {
+  id: string;
+  repo_id: string;
+  github_pr_number: number;
+  github_pr_title: string | null;
+  doc_pr_url: string | null;
+  status: string;
+  error_message: string | null;
+  created_at: string;
+  full_name: string | null;
+}
+
+function buildFilterHref(
+  baseParams: URLSearchParams,
+  overrides: Record<string, string | undefined>
+): string {
+  const params = new URLSearchParams(baseParams.toString());
+  for (const [key, value] of Object.entries(overrides)) {
+    if (value === undefined || value === "") {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+  }
+  if (overrides.status !== undefined || overrides.repo !== undefined) {
+    params.delete("page");
+  }
+  const qs = params.toString();
+  return `/activity${qs ? `?${qs}` : ""}`;
+}
+
 /**
- * Activity page. Placeholder — full activity feed coming next.
+ * Activity log page. Lists all doc_updates for the current user's repos
+ * with pagination and status/repo filters via URL search params.
  */
-export default function ActivityPage() {
+export default async function ActivityPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; status?: string; repo?: string }>;
+}) {
+  const params = await searchParams;
+  const page = Math.max(1, Number(params.page) || 1);
+  const statusFilter = params.status ?? "";
+  const repoFilter = params.repo ?? "";
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) redirect("/login");
+
+  // Fetch user's repos for repo IDs and name map
+  const { data: userRepos } = await supabase
+    .from("repos")
+    .select("id, full_name");
+
+  const repoNameMap = new Map(
+    (userRepos ?? []).map((r: { id: string; full_name: string | null }) => [
+      r.id,
+      r.full_name,
+    ])
+  );
+  const repoIds = (userRepos ?? []).map((r: { id: string }) => r.id);
+
+  if (repoIds.length === 0) {
+    return (
+      <div className="space-y-6">
+        <Header />
+        <EmptyState message="No activity yet" />
+      </div>
+    );
+  }
+
+  // Build query
+  let query = supabase
+    .from("doc_updates")
+    .select("*", { count: "exact" })
+    .in("repo_id", repoIds)
+    .order("created_at", { ascending: false });
+
+  if (statusFilter) {
+    query = query.eq("status", statusFilter);
+  }
+  if (repoFilter) {
+    query = query.eq("repo_id", repoFilter);
+  }
+
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+  query = query.range(from, to);
+
+  const { data: rawData, count, error } = await query;
+
+  const hasError = !!error;
+  const totalCount = count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  const baseParams = new URLSearchParams();
+  if (statusFilter) baseParams.set("status", statusFilter);
+  if (repoFilter) baseParams.set("repo", repoFilter);
+
+  const items: ActivityItem[] = (rawData ?? []).map((d: ActivityItem) => ({
+    ...d,
+    full_name: repoNameMap.get(d.repo_id) ?? null,
+  }));
+
+  return (
+    <div className="space-y-6">
+      <Header />
+
+      {/* Filters */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-zinc-500">Status:</span>
+          {STATUSES.map((s) => {
+            const active = statusFilter === s.value;
+            return (
+              <Link
+                key={s.value || "all"}
+                href={buildFilterHref(baseParams, { status: s.value || undefined })}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  active
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                }`}
+              >
+                {s.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {userRepos && userRepos.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-medium text-zinc-500">Repo:</span>
+            <Link
+              href={buildFilterHref(baseParams, { repo: undefined })}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                !repoFilter
+                  ? "bg-zinc-100 text-zinc-900"
+                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+              }`}
+            >
+              All
+            </Link>
+            {userRepos.map((r: { id: string; full_name: string | null }) => (
+              <Link
+                key={r.id}
+                href={buildFilterHref(baseParams, { repo: r.id })}
+                className={`max-w-40 truncate rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  repoFilter === r.id
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                }`}
+              >
+                {r.full_name ?? `#${r.id}`}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Table */}
+      {hasError ? (
+        <EmptyState message="Failed to load activity" />
+      ) : items.length === 0 ? (
+        <EmptyState
+          message={
+            statusFilter || repoFilter
+              ? "No results for this filter"
+              : "No activity yet"
+          }
+        />
+      ) : (
+        <>
+          <div className="overflow-hidden rounded-lg border border-zinc-800">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-zinc-800 bg-zinc-900/50">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                    Repository
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                    Triggered by
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                    Error
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-zinc-400">
+                    When
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-800">
+                {items.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="bg-zinc-900 transition-colors hover:bg-zinc-900/70"
+                  >
+                    <td className="max-w-40 truncate px-4 py-3 text-zinc-300">
+                      {item.full_name ?? "Unknown repo"}
+                    </td>
+                    <td className="px-4 py-3 text-zinc-400">
+                      {item.doc_pr_url ? (
+                        <a
+                          href={item.doc_pr_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-zinc-300 underline hover:text-zinc-100"
+                        >
+                          #{item.github_pr_number}
+                        </a>
+                      ) : (
+                        <span className="text-zinc-300">
+                          #{item.github_pr_number}
+                        </span>
+                      )}
+                      {item.github_pr_title && (
+                        <span className="ml-1.5 text-zinc-500">
+                          {item.github_pr_title}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={item.status} />
+                    </td>
+                    <td className="max-w-48 px-4 py-3 text-zinc-500">
+                      {item.status === "error" && item.error_message ? (
+                        <span
+                          className="truncate text-xs text-red-400"
+                          title={item.error_message}
+                        >
+                          {item.error_message.length > 60
+                            ? `${item.error_message.slice(0, 60)}…`
+                            : item.error_message}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-600">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-right text-zinc-500">
+                      {timeAgo(item.created_at)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-zinc-500">
+              Showing {from + 1}–{Math.min(to + 1, totalCount)} of{" "}
+              {totalCount} results
+            </span>
+            <div className="flex items-center gap-2">
+              {page > 1 ? (
+                <Link
+                  href={buildFilterHref(baseParams, {
+                    page: String(page - 1),
+                  })}
+                  className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-300"
+                >
+                  Previous
+                </Link>
+              ) : (
+                <span className="cursor-not-allowed rounded-md bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-600">
+                  Previous
+                </span>
+              )}
+              {page < totalPages ? (
+                <Link
+                  href={buildFilterHref(baseParams, {
+                    page: String(page + 1),
+                  })}
+                  className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-300"
+                >
+                  Next
+                </Link>
+              ) : (
+                <span className="cursor-not-allowed rounded-md bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-600">
+                  Next
+                </span>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function Header() {
   return (
     <div>
       <h1 className="text-xl font-semibold text-zinc-100">Activity</h1>
+      <p className="mt-1 text-sm text-zinc-400">
+        Every documentation update DocDrift has generated.
+      </p>
     </div>
+  );
+}
+
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 py-16">
+      <Activity className="h-10 w-10 text-zinc-600" />
+      <p className="mt-4 text-sm text-zinc-400">{message}</p>
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const variants: Record<string, string> = {
+    generated: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    skipped: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
+    error: "bg-red-500/10 text-red-400 border-red-500/20",
+    pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${
+        variants[status] ?? variants.skipped
+      }`}
+    >
+      {status}
+    </span>
   );
 }

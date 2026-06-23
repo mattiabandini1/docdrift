@@ -10,11 +10,7 @@ interface ActivityRow {
   github_pr_title: string | null;
   status: string;
   created_at: string;
-  // Supabase returns foreign relations as arrays without generated types
-  repos: Array<{
-    github_repo_id: number;
-    full_name: string | null;
-  }> | null;
+  repos: { full_name: string } | null;
 }
 
 /**
@@ -61,14 +57,19 @@ export default async function DashboardPage() {
   const errors = errorsResult.error ? 0 : (errorsResult.count ?? 0);
 
   const repoIds = reposDataResult.data?.map((r: { id: string }) => r.id) ?? [];
+  const repoNameMap = new Map(
+    (reposDataResult.data ?? []).map((r: { id: string; full_name: string | null }) => [
+      r.id,
+      r.full_name,
+    ])
+  );
 
-  // Fetch recent activity filtered by the user's repo IDs so the nested
-  // repos join reliably resolves full_name
+  // Fetch recent activity filtered by the user's repo IDs
   const activityResult = repoIds.length > 0
     ? await supabase
         .from("doc_updates")
         .select(
-          "id, github_pr_number, github_pr_title, status, created_at, repos(full_name, github_repo_id)"
+          "id, github_pr_number, github_pr_title, status, created_at, repo_id"
         )
         .in("repo_id", repoIds)
         .order("created_at", { ascending: false })
@@ -77,7 +78,16 @@ export default async function DashboardPage() {
 
   const recentActivity: ActivityRow[] = activityResult.error
     ? []
-    : (activityResult.data ?? []);
+    : (activityResult.data ?? []).map((d) => ({
+        id: d.id,
+        github_pr_number: d.github_pr_number,
+        github_pr_title: d.github_pr_title,
+        status: d.status,
+        created_at: d.created_at,
+        repos: repoNameMap.has(d.repo_id)
+          ? { full_name: repoNameMap.get(d.repo_id)! }
+          : null,
+      }));
 
   return (
     <div className="space-y-8">
@@ -155,8 +165,7 @@ export default async function DashboardPage() {
                       className="bg-zinc-900 transition-colors hover:bg-zinc-900/70"
                     >
                       <td className="max-w-48 truncate px-4 py-3 text-zinc-300">
-                        {item.repos?.[0]?.full_name ??
-                          `#${item.repos?.[0]?.github_repo_id ?? "—"}`}
+                        {item.repos?.full_name ?? "Unknown repo"}
                       </td>
                       <td className="px-4 py-3 text-zinc-400">
                         <span className="text-zinc-300">
