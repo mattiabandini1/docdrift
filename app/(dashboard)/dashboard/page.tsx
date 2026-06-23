@@ -31,8 +31,10 @@ export default async function DashboardPage() {
 
   const sevenDaysAgo = daysAgoISO(7);
 
-  const [reposResult, updatesResult, prsResult, errorsResult, activityResult] =
+  // Fetch repo data and stat counts in parallel
+  const [reposDataResult, reposCountResult, updatesResult, prsResult, errorsResult] =
     await Promise.all([
+      supabase.from("repos").select("id, full_name, github_repo_id"),
       supabase
         .from("repos")
         .select("*", { count: "exact", head: true })
@@ -51,19 +53,28 @@ export default async function DashboardPage() {
         .select("*", { count: "exact", head: true })
         .eq("status", "error")
         .gte("created_at", sevenDaysAgo),
-      supabase
-        .from("doc_updates")
-        .select(
-          "id, github_pr_number, github_pr_title, status, created_at, repos(github_repo_id, full_name)"
-        )
-        .order("created_at", { ascending: false })
-        .limit(5),
     ]);
 
-  const activeRepos = reposResult.error ? 0 : (reposResult.count ?? 0);
+  const activeRepos = reposCountResult.error ? 0 : (reposCountResult.count ?? 0);
   const totalUpdates = updatesResult.error ? 0 : (updatesResult.count ?? 0);
   const prsOpened = prsResult.error ? 0 : (prsResult.count ?? 0);
   const errors = errorsResult.error ? 0 : (errorsResult.count ?? 0);
+
+  const repoIds = reposDataResult.data?.map((r: { id: string }) => r.id) ?? [];
+
+  // Fetch recent activity filtered by the user's repo IDs so the nested
+  // repos join reliably resolves full_name
+  const activityResult = repoIds.length > 0
+    ? await supabase
+        .from("doc_updates")
+        .select(
+          "id, github_pr_number, github_pr_title, status, created_at, repos(full_name, github_repo_id)"
+        )
+        .in("repo_id", repoIds)
+        .order("created_at", { ascending: false })
+        .limit(5)
+    : { data: [], error: null };
+
   const recentActivity: ActivityRow[] = activityResult.error
     ? []
     : (activityResult.data ?? []);
