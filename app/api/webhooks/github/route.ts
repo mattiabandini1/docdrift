@@ -6,6 +6,7 @@ import { findImpactedSections } from "@/lib/embeddings/match";
 import { generateDocUpdate, type GenerateParams } from "@/lib/llm/generate";
 import { sendDocUpdateEmail, sendLimitReachedEmail } from "@/lib/email/templates";
 import { createServiceClient } from "@/lib/supabase/server";
+import { PLAN_LIMITS } from "@/lib/plans";
 
 export const runtime = "nodejs";
 
@@ -17,8 +18,6 @@ interface RateLimitEntry {
 const rateLimiter = new Map<string, RateLimitEntry>();
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 10;
-
-const FREE_PLAN_MONTHLY_LIMIT = 10;
 const MAX_IMPACTED_SECTIONS_PER_FILE = 2;
 
 /**
@@ -210,7 +209,27 @@ export async function POST(request: Request): Promise<Response> {
     .eq("id", repo.user_id)
     .single();
 
-  if (profile?.plan === "free") {
+  const plan: keyof typeof PLAN_LIMITS = profile?.plan ?? "free";
+  const limits = PLAN_LIMITS[plan];
+
+  // Check 1 — repo limit
+  if (isFinite(limits.repos)) {
+    const { count: activeRepoCount } = await supabase
+      .from("repos")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", repo.user_id)
+      .eq("is_active", true);
+
+    if (activeRepoCount !== null && activeRepoCount > limits.repos) {
+      return Response.json({
+        status: "skipped",
+        reason: "repo_limit_reached",
+      });
+    }
+  }
+
+  // Check 2 — updates limit (free plan only)
+  if (plan === "free" && isFinite(limits.updatesPerMonth)) {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
@@ -221,7 +240,7 @@ export async function POST(request: Request): Promise<Response> {
       .eq("status", "generated")
       .gte("created_at", startOfMonth);
 
-    if (count !== null && count >= FREE_PLAN_MONTHLY_LIMIT) {
+    if (count !== null && count >= limits.updatesPerMonth) {
       const repoName = payload.repository.name;
 
       await sendLimitReachedEmail(profile.email, { repoName }).catch(() => {

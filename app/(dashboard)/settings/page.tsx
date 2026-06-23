@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import NotificationSettings from "@/components/dashboard/NotificationSettings";
 import DeleteAccount from "@/components/dashboard/DeleteAccount";
+import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
 
 const PLAN_BADGES: Record<string, string> = {
   free: "bg-zinc-800 text-zinc-400",
@@ -27,7 +28,7 @@ export default async function SettingsPage() {
   // Fetch the profile row for plan and notification_email
   const { data: profile } = await supabase
     .from("profiles")
-    .select("email, plan, notification_email")
+    .select("email, plan, notification_email, stripe_subscription_id")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -71,6 +72,9 @@ export default async function SettingsPage() {
                 >
                   Upgrade plan
                 </Link>
+              )}
+              {profile?.stripe_subscription_id && (
+                <ManageSubscriptionButton />
               )}
             </div>
           </div>

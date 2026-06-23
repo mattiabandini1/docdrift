@@ -60,3 +60,27 @@ export async function sendLimitReachedEmail(
       `Upgrade to continue.`,
   });
 }
+
+/**
+ * Sends a payment failure notification email.
+ *
+ * @param to - The recipient email address.
+ */
+export async function sendPaymentFailedEmail(to: string): Promise<void> {
+  if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
+    console.error("Missing required email environment variables");
+    return;
+  }
+
+  const resend = new Resend(RESEND_API_KEY);
+  const portalUrl = `${process.env.NEXT_PUBLIC_APP_URL}/settings`;
+
+  await resend.emails.send({
+    from: RESEND_FROM_EMAIL,
+    to,
+    subject: "DocDrift: payment failed",
+    text:
+      `Your payment failed. ` +
+      `Please update your payment method to continue using DocDrift: ${portalUrl}`,
+  });
+}

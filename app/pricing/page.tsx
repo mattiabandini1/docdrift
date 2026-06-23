@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Check } from "lucide-react";
 import Nav from "@/components/landing/Nav";
+import UpgradeButton from "@/components/pricing/UpgradeButton";
 
 /**
  * Pricing page. Lists the three subscription plans plus an FAQ section.
@@ -92,12 +93,11 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/login"
-                className="mt-8 block rounded-md bg-zinc-100 py-2.5 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
-              >
-                Start free trial
-              </Link>
+              <UpgradeButton
+                plan="starter"
+                label="Start free trial"
+                className="mt-8 block w-full rounded-md bg-zinc-100 py-2.5 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+              />
               <p className="mt-3 text-center text-xs text-zinc-500">
                 7-day free trial · Cancel anytime
               </p>
@@ -129,12 +129,11 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <Link
-                href="/login"
-                className="mt-8 block rounded-md border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
-              >
-                Start free trial
-              </Link>
+              <UpgradeButton
+                plan="pro"
+                label="Start free trial"
+                className="mt-8 block w-full rounded-md border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+              />
               <p className="mt-3 text-center text-xs text-zinc-500">
                 7-day free trial · Cancel anytime
               </p>
