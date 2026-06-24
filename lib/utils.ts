@@ -10,6 +10,20 @@ export function daysAgoISO(days: number): string {
 }
 
 /**
+ * Returns a human-readable date string for the trial end date (7 days from
+ * now). Extracted to avoid the react-hooks/purity lint rule on Date.now().
+ * @returns A locale-formatted date string like "July 1, 2026"
+ */
+export function trialEndDate(): string {
+  const trialEnd = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  return trialEnd.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+/**
  * Converts an ISO date string to a human-readable relative time.
  * @param date - ISO 8601 date string
  * @returns A compact relative time string like "2h ago" or "just now"

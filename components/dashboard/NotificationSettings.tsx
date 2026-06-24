@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition, useRef } from "react";
 
 interface NotificationSettingsProps {
   currentEmail: string;
@@ -8,14 +8,31 @@ interface NotificationSettingsProps {
 
 /**
  * Notification email settings. Allows the user to update the email address
- * where DocDrift sends update notifications.
+ * where DocDrift sends update notifications. Shows inline success/error
+ * feedback that auto-hides after 3 seconds.
  */
 export default function NotificationSettings({
   currentEmail,
 }: NotificationSettingsProps) {
   const [email, setEmail] = useState(currentEmail);
-  const [saved, setSaved] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
   const [isPending, startTransition] = useTransition();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const showFeedback = (type: "success" | "error", message: string) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setFeedback({ type, message });
+    timerRef.current = setTimeout(() => setFeedback(null), 3000);
+  };
 
   const handleSave = () => {
     startTransition(async () => {
@@ -26,11 +43,12 @@ export default function NotificationSettings({
           body: JSON.stringify({ notification_email: email }),
         });
         if (res.ok) {
-          setSaved(true);
-          setTimeout(() => setSaved(false), 3000);
+          showFeedback("success", "Saved successfully");
+        } else {
+          showFeedback("error", "Failed to save. Please try again.");
         }
       } catch {
-        // Silently fail — user can retry
+        showFeedback("error", "Failed to save. Please try again.");
       }
     });
   };
@@ -63,8 +81,17 @@ export default function NotificationSettings({
             {isPending ? "Saving…" : "Save"}
           </button>
         </div>
-        {saved && (
-          <p className="mt-1 text-xs text-emerald-400">Saved!</p>
+        {feedback && (
+          <p
+            className={`mt-1 text-xs ${
+              feedback.type === "success"
+                ? "text-emerald-400"
+                : "text-red-400"
+            }`}
+          >
+            {feedback.type === "success" ? "✓ " : "✗ "}
+            {feedback.message}
+          </p>
         )}
       </div>
     </div>

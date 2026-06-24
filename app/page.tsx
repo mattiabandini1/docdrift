@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { GitBranch, GitMerge, FileCheck, Check, X } from "lucide-react";
 import Nav from "@/components/landing/Nav";
+
+export const metadata: Metadata = {
+  title: "DocDrift — Documentation that keeps up with your code",
+  description:
+    "DocDrift watches your GitHub PRs and automatically opens a documentation PR every time your code changes.",
+};
 
 /**
  * DocDrift public homepage. Static landing page with hero, how-it-works,

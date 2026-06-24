@@ -7,6 +7,7 @@ import { generateDocUpdate, type GenerateParams } from "@/lib/llm/generate";
 import { sendDocUpdateEmail, sendLimitReachedEmail } from "@/lib/email/templates";
 import { createServiceClient } from "@/lib/supabase/server";
 import { PLAN_LIMITS } from "@/lib/plans";
+import { validateEnv } from "@/lib/env";
 
 export const runtime = "nodejs";
 
@@ -123,6 +124,8 @@ function replaceSection(
  */
 // ARCH: consider background queue when volume grows
 export async function POST(request: Request): Promise<Response> {
+  validateEnv();
+
   const ip = request.headers.get("x-forwarded-for") ?? "unknown";
 
   if (!checkRateLimit(ip)) {

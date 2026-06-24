@@ -47,6 +47,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
   };
 
   const handleRemove = () => {
+    // TODO: replace with a proper modal dialog before launch
     if (!window.confirm("Are you sure you want to remove this repository?")) {
       return;
     }
@@ -99,7 +100,9 @@ export default function RepoCard({ repo }: RepoCardProps) {
               : "bg-zinc-800 text-zinc-500 hover:bg-zinc-700 hover:text-zinc-400"
           }`}
         >
-          {active ? (
+          {isToggling ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-400 border-t-transparent" />
+          ) : active ? (
             <>
               <Power className="h-3.5 w-3.5" />
               Active

@@ -1,6 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { stripe, getPlanFromPriceId } from "@/lib/stripe/client";
 import { sendPaymentFailedEmail } from "@/lib/email/templates";
+import { validateEnv } from "@/lib/env";
 
 /**
  * POST /api/stripe/webhook
@@ -8,6 +9,7 @@ import { sendPaymentFailedEmail } from "@/lib/email/templates";
  * Always returns 200 to prevent Stripe from retrying (even on error).
  */
 export async function POST(request: Request) {
+  validateEnv();
   const rawBody = await request.text();
   const signature = request.headers.get("stripe-signature");
 

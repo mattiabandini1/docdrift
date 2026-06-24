@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { GitBranch, FileText, GitPullRequest, AlertCircle } from "lucide-react";
 import { daysAgoISO, timeAgo } from "@/lib/utils";
+import UpgradeBanner from "@/components/dashboard/UpgradeBanner";
 
 interface ActivityRow {
   id: string;
@@ -17,13 +18,29 @@ interface ActivityRow {
  * Dashboard overview page. Queries Supabase for repo and doc_update stats
  * and displays them as stat cards alongside a recent activity table.
  */
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ upgraded?: string }>;
+}) {
   const supabase = await createClient();
   const { data: userData } = await supabase.auth.getUser();
 
   if (!userData.user) {
     redirect("/login");
   }
+
+  const params = await searchParams;
+  const showUpgradeBanner = params.upgraded === "true";
+
+  // Fetch the profile plan for the upgrade banner
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("plan")
+    .eq("id", userData.user.id)
+    .maybeSingle();
+
+  const plan = (profile?.plan as string) ?? "free";
 
   const sevenDaysAgo = daysAgoISO(7);
 
@@ -91,6 +108,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {showUpgradeBanner && <UpgradeBanner plan={plan} />}
+
       <div>
         <h1 className="text-xl font-semibold text-zinc-100">Dashboard</h1>
         <p className="mt-1 text-sm text-zinc-400">
@@ -98,45 +117,56 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <StatCard
-          label="Connected Repos"
-          value={activeRepos}
-          icon={<GitBranch className="h-4 w-4" />}
-        />
-        <StatCard
-          label="Updates This Week"
-          value={totalUpdates}
-          icon={<FileText className="h-4 w-4" />}
-        />
-        <StatCard
-          label="PRs Opened"
-          value={prsOpened}
-          icon={<GitPullRequest className="h-4 w-4" />}
-        />
-        <StatCard
-          label="Errors"
-          value={errors}
-          icon={<AlertCircle className="h-4 w-4" />}
-        />
-      </div>
+      {activeRepos === 0 ? (
+        <div className="rounded-xl border border-blue-500/30 bg-zinc-900 p-8 text-center">
+          <h2 className="text-lg font-semibold text-zinc-100">
+            Welcome to DocDrift 👋
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-zinc-400">
+            You&rsquo;re one step away from automated documentation. Connect
+            your first GitHub repository to get started.
+          </p>
+          <Link
+            href="/repos"
+            className="mt-4 inline-flex items-center rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+          >
+            Connect your first repo
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <StatCard
+            label="Connected Repos"
+            value={activeRepos}
+            icon={<GitBranch className="h-4 w-4" />}
+          />
+          <StatCard
+            label="Updates This Week"
+            value={totalUpdates}
+            icon={<FileText className="h-4 w-4" />}
+          />
+          <StatCard
+            label="PRs Opened"
+            value={prsOpened}
+            icon={<GitPullRequest className="h-4 w-4" />}
+          />
+          <StatCard
+            label="Errors"
+            value={errors}
+            icon={<AlertCircle className="h-4 w-4" />}
+          />
+        </div>
+      )}
 
+      {activeRepos > 0 && (
       <div>
         <h2 className="text-sm font-medium text-zinc-300">Recent Activity</h2>
         <div className="mt-3">
           {recentActivity.length === 0 ? (
             <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-8 text-center">
               <p className="text-sm text-zinc-400">
-                No documentation updates yet.
-              </p>
-              <p className="mt-1 text-xs text-zinc-500">
-                <Link
-                  href="/repos"
-                  className="text-zinc-400 underline hover:text-zinc-300"
-                >
-                  Connect a repository
-                </Link>{" "}
-                to get started.
+                No activity yet — merge a PR on a connected repository to see
+                DocDrift in action.
               </p>
             </div>
           ) : (
@@ -191,6 +221,7 @@ export default async function DashboardPage() {
           )}
         </div>
       </div>
+      )}
     </div>
   );
 }

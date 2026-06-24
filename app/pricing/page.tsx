@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import Nav from "@/components/landing/Nav";
 import UpgradeButton from "@/components/pricing/UpgradeButton";
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "Simple pricing for DocDrift. Start free, upgrade when ready. Starter at $12/month, Pro at $29/month.",
+};
 
 /**
  * Pricing page. Lists the three subscription plans plus an FAQ section.
