@@ -22,15 +22,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-full flex-col items-center justify-center px-6 py-12">
-      <div className="w-full max-w-sm space-y-6 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+    <div className="flex min-h-full flex-col items-center justify-center bg-surface-page px-6 py-12">
+      <div className="w-full max-w-sm space-y-6 rounded-lg border border-border-subtle bg-surface-card p-8 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
           Sign in to DocDrift
         </h1>
         <button
           type="button"
           onClick={handleLogin}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-text-primary px-4 py-3 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
         >
           Continue with GitHub
         </button>

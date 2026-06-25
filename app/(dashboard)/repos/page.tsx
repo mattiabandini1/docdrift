@@ -46,10 +46,10 @@ export default async function ReposPage({
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-100">
+          <h1 className="text-xl font-semibold text-text-primary">
             Repositories
           </h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-text-secondary">
             Connect your GitHub repositories to auto-sync documentation.
           </p>
         </div>
@@ -57,7 +57,7 @@ export default async function ReposPage({
           href={GITHUB_APP_INSTALL_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-2 self-start rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+          className="inline-flex shrink-0 items-center gap-2 self-start rounded-md bg-text-primary px-4 py-2 text-sm font-semibold text-surface-page transition-colors hover:bg-zinc-200"
         >
           <ExternalLink className="h-4 w-4" />
           Connect Repository
@@ -66,36 +66,36 @@ export default async function ReposPage({
 
       {/* Success/Error banners */}
       {connected && (
-        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400">
+        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-semibold text-emerald-400">
           Repository connected successfully!
         </div>
       )}
       {error === "github_api_error" && (
-        <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="rounded-lg border border-accent-red/20 bg-accent-red-soft px-4 py-3 text-sm font-semibold text-accent-red">
           Failed to connect to GitHub. Please try again.
         </div>
       )}
       {error === "missing_installation" && (
-        <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+        <div className="rounded-lg border border-accent-red/20 bg-accent-red-soft px-4 py-3 text-sm font-semibold text-accent-red">
           Installation ID missing. Please try again.
         </div>
       )}
 
       {/* Repo list or empty state */}
       {repoList.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 py-16">
-          <GitBranch className="h-10 w-10 text-zinc-600" />
-          <p className="mt-4 text-sm text-zinc-400">
+        <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16">
+          <GitBranch className="h-10 w-10 text-text-tertiary" />
+          <p className="mt-4 text-sm text-text-secondary">
             No repositories connected yet
           </p>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-text-tertiary">
             Click &ldquo;Connect Repository&rdquo; to get started
           </p>
           <a
             href={GITHUB_APP_INSTALL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-2 rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+            className="mt-4 inline-flex items-center gap-2 rounded-md bg-text-primary px-4 py-2 text-sm font-semibold text-surface-page transition-colors hover:bg-zinc-200"
           >
             <ExternalLink className="h-4 w-4" />
             Connect Repository

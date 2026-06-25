@@ -10,35 +10,36 @@ export const metadata: Metadata = {
     "Simple pricing for DocDrift. Start free, upgrade when ready. Starter at $12/month, Pro at $29/month.",
 };
 
-/**
- * Pricing page. Lists the three subscription plans plus an FAQ section.
- */
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-surface-page text-text-primary">
       <Nav />
 
-      <section className="py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <h1 className="text-center text-3xl font-semibold">Pricing</h1>
-          <p className="mt-2 text-center text-zinc-400">
-            No surprises. Cancel anytime.
-          </p>
+      <section className="py-40">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
+              Pricing
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight">
+              Simple pricing. No surprises.
+            </h1>
+            <p className="mt-2 text-sm text-text-secondary">
+              Cancel anytime.
+            </p>
+          </div>
 
-          {/* Plan cards */}
-          <div className="mt-16 grid gap-6 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Free */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8">
-              <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400">
+            <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">
                 Free forever
               </span>
-              <p className="mt-4 text-4xl font-bold">
-                $0<span className="text-lg font-normal text-zinc-400">/month</span>
+              <p className="mt-5 text-5xl font-bold tracking-tight">
+                $0<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-zinc-400">
-                Perfect for trying DocDrift
-              </p>
-              <ul className="mt-6 space-y-3">
+              <p className="mt-2 text-sm text-text-secondary">Perfect for trying DocDrift</p>
+              <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "1 repository", ok: true },
                   { text: "10 documentation updates/month", ok: true },
@@ -48,38 +49,30 @@ export default function PricingPage() {
                   { text: "Multiple repositories", ok: false },
                   { text: "Priority support", ok: false },
                 ].map(({ text, ok }) => (
-                  <li key={text} className="flex items-start gap-3 text-sm">
-                    <Check
-                      className={`mt-0.5 h-4 w-4 shrink-0 ${
-                        ok ? "text-emerald-400" : "text-zinc-700"
-                      }`}
-                    />
-                    <span className={ok ? "text-zinc-300" : "text-zinc-500"}>
-                      {text}
-                    </span>
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
+                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-text-tertiary"}`} />
+                    <span className={ok ? "text-text-primary" : "text-text-tertiary"}>{text}</span>
                   </li>
                 ))}
               </ul>
               <Link
                 href="/login"
-                className="mt-8 block rounded-md border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+                className="mt-6 block rounded-md border border-border-strong bg-transparent py-2.5 text-center text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-text-secondary hover:bg-surface-elevated"
               >
                 Get started
               </Link>
             </div>
 
-            {/* Starter (highlighted) */}
-            <div className="rounded-xl border border-blue-500/30 bg-zinc-900 p-8 ring-2 ring-blue-500">
-              <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-xs text-blue-400">
+            {/* Starter */}
+            <div className="flex flex-col rounded-lg border border-border-strong bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-accent-blue/20 bg-accent-blue/10 px-2.5 py-0.5 text-xs font-semibold text-accent-blue">
                 Most popular
               </span>
-              <p className="mt-4 text-4xl font-bold">
-                $12<span className="text-lg font-normal text-zinc-400">/month</span>
+              <p className="mt-5 text-5xl font-bold tracking-tight">
+                $12<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-zinc-400">
-                For active solo developers
-              </p>
-              <ul className="mt-6 space-y-3">
+              <p className="mt-2 text-sm text-text-secondary">For active solo developers</p>
+              <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "3 repositories", ok: true },
                   { text: "Unlimited documentation updates", ok: true },
@@ -88,40 +81,28 @@ export default function PricingPage() {
                   { text: "Multiple repositories", ok: false },
                   { text: "Priority support", ok: false },
                 ].map(({ text, ok }) => (
-                  <li key={text} className="flex items-start gap-3 text-sm">
-                    <Check
-                      className={`mt-0.5 h-4 w-4 shrink-0 ${
-                        ok ? "text-emerald-400" : "text-zinc-700"
-                      }`}
-                    />
-                    <span className={ok ? "text-zinc-300" : "text-zinc-500"}>
-                      {text}
-                    </span>
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
+                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-text-tertiary"}`} />
+                    <span className={ok ? "text-text-primary" : "text-text-tertiary"}>{text}</span>
                   </li>
                 ))}
               </ul>
               <UpgradeButton
                 plan="starter"
                 label="Start free trial"
-                className="mt-8 block w-full rounded-md bg-zinc-100 py-2.5 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-6 block w-full rounded-md bg-text-primary py-2.5 text-center text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
               />
-              <p className="mt-3 text-center text-xs text-zinc-500">
-                7-day free trial · Cancel anytime
-              </p>
+              <p className="mt-3 text-center text-xs text-text-tertiary">7-day free trial · Cancel anytime</p>
             </div>
 
             {/* Pro */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8">
-              <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400">
-                Pro
-              </span>
-              <p className="mt-4 text-4xl font-bold">
-                $29<span className="text-lg font-normal text-zinc-400">/month</span>
+            <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">Pro</span>
+              <p className="mt-5 text-5xl font-bold tracking-tight">
+                $29<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-zinc-400">
-                For teams and power users
-              </p>
-              <ul className="mt-6 space-y-3">
+              <p className="mt-2 text-sm text-text-secondary">For teams and power users</p>
+              <ul className="mt-5 flex-1 space-y-2">
                 {[
                   "Unlimited repositories",
                   "Unlimited documentation updates",
@@ -130,28 +111,24 @@ export default function PricingPage() {
                   "Priority support",
                   "Early access to new features",
                 ].map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
-                    <span className="text-zinc-300">{text}</span>
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
+                    <span className="text-text-primary">{text}</span>
                   </li>
                 ))}
               </ul>
               <UpgradeButton
                 plan="pro"
                 label="Start free trial"
-                className="mt-8 block w-full rounded-md border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-6 block w-full rounded-md border border-border-strong bg-transparent py-2.5 text-center text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-text-secondary hover:bg-surface-elevated disabled:cursor-not-allowed disabled:opacity-50"
               />
-              <p className="mt-3 text-center text-xs text-zinc-500">
-                7-day free trial · Cancel anytime
-              </p>
+              <p className="mt-3 text-center text-xs text-text-tertiary">7-day free trial · Cancel anytime</p>
             </div>
           </div>
 
           {/* FAQ */}
-          <div className="mt-32">
-            <h2 className="text-center text-2xl font-semibold">
-              Frequently asked questions
-            </h2>
+          <div className="mt-40">
+            <h2 className="text-center text-2xl font-semibold text-text-primary">Frequently asked questions</h2>
             <div className="mx-auto mt-12 max-w-2xl space-y-8">
               {[
                 {
@@ -172,8 +149,8 @@ export default function PricingPage() {
                 },
               ].map(({ q, a }) => (
                 <div key={q}>
-                  <h3 className="text-sm font-medium text-zinc-200">{q}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">{a}</p>
+                  <h3 className="text-sm font-semibold text-text-primary">{q}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">{a}</p>
                 </div>
               ))}
             </div>
@@ -181,20 +158,13 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <p className="text-xs text-zinc-500">© 2026 DocDrift</p>
+      <footer className="border-t border-border-subtle py-8">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+          <p className="text-xs text-text-tertiary">© 2026 DocDrift</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
-              Privacy
-            </a>
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
-              Terms
-            </a>
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
-              GitHub
-            </a>
+            <a href="#" className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary">Privacy</a>
+            <a href="#" className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary">Terms</a>
+            <a href="#" className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary">GitHub</a>
           </div>
         </div>
       </footer>

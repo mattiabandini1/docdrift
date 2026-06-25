@@ -125,17 +125,17 @@ export default async function ActivityPage({
       {/* Filters */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium text-zinc-500">Status:</span>
+          <span className="text-xs font-semibold text-text-tertiary">Status:</span>
           {STATUSES.map((s) => {
             const active = statusFilter === s.value;
             return (
               <Link
                 key={s.value || "all"}
                 href={buildFilterHref(baseParams, { status: s.value || undefined })}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                  active
-                    ? "bg-zinc-100 text-zinc-900"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                    active
+                      ? "bg-text-primary text-surface-page"
+                      : "bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary"
                 }`}
               >
                 {s.label}
@@ -146,13 +146,13 @@ export default async function ActivityPage({
 
         {userRepos && userRepos.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-zinc-500">Repo:</span>
+            <span className="text-xs font-semibold text-text-tertiary">Repo:</span>
             <Link
               href={buildFilterHref(baseParams, { repo: undefined })}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+              className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                 !repoFilter
-                  ? "bg-zinc-100 text-zinc-900"
-                  : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                  ? "bg-text-primary text-surface-page"
+                  : "bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary"
               }`}
             >
               All
@@ -161,10 +161,10 @@ export default async function ActivityPage({
               <Link
                 key={r.id}
                 href={buildFilterHref(baseParams, { repo: r.id })}
-                className={`max-w-40 truncate rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                className={`max-w-40 truncate rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
                   repoFilter === r.id
-                    ? "bg-zinc-100 text-zinc-900"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                    ? "bg-text-primary text-surface-page"
+                    : "bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary"
                 }`}
               >
                 {r.full_name ?? `#${r.id}`}
@@ -187,75 +187,80 @@ export default async function ActivityPage({
         />
       ) : (
         <>
-          <div className="overflow-hidden rounded-lg border border-zinc-800">
+          <div className="overflow-hidden rounded-lg border border-border-subtle">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                <tr className="border-b border-border-subtle bg-surface-card">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     Repository
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     Triggered by
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     Error
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-zinc-400">
+                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                     When
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800">
+              <tbody className="divide-y divide-border-subtle">
                 {items.map((item) => (
                   <tr
                     key={item.id}
-                    className="bg-zinc-900 transition-colors hover:bg-zinc-900/70"
+                    className="border-b border-border-subtle/50 transition-colors duration-150 hover:bg-surface-card/50"
                   >
-                    <td className="max-w-40 truncate px-4 py-3 text-zinc-300">
+                    <td className="max-w-40 truncate px-4 py-3 text-text-primary">
                       {item.full_name ?? "Unknown repo"}
                     </td>
-                    <td className="px-4 py-3 text-zinc-400">
-                      {item.doc_pr_url ? (
-                        <a
-                          href={item.doc_pr_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-zinc-300 underline hover:text-zinc-100"
-                        >
-                          #{item.github_pr_number}
-                        </a>
-                      ) : (
-                        <span className="text-zinc-300">
-                          #{item.github_pr_number}
-                        </span>
-                      )}
-                      {item.github_pr_title && (
-                        <span className="ml-1.5 text-zinc-500">
-                          {item.github_pr_title}
-                        </span>
-                      )}
+                    <td className="px-4 py-3">
+                      <div className="flex max-w-xs items-center gap-1.5">
+                        {item.doc_pr_url ? (
+                          <a
+                            href={item.doc_pr_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 font-mono font-semibold text-text-primary underline hover:text-text-secondary"
+                          >
+                            #{item.github_pr_number}
+                          </a>
+                        ) : (
+                          <span className="shrink-0 font-mono font-semibold text-text-primary">
+                            #{item.github_pr_number}
+                          </span>
+                        )}
+                        {item.github_pr_title && (
+                          <span
+                            className="truncate text-text-secondary"
+                            title={item.github_pr_title}
+                          >
+                            {item.github_pr_title}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <StatusBadge status={item.status} />
                     </td>
-                    <td className="max-w-48 px-4 py-3 text-zinc-500">
+                    <td className="px-4 py-3">
                       {item.status === "error" && item.error_message ? (
-                        <span
-                          className="truncate text-xs text-red-400"
-                          title={item.error_message}
-                        >
-                          {item.error_message.length > 60
-                            ? `${item.error_message.slice(0, 60)}…`
-                            : item.error_message}
-                        </span>
+                        <div className="flex max-w-48 items-center">
+                          <span
+                            className="truncate text-xs font-semibold text-accent-red"
+                            title={item.error_message}
+                          >
+                            {item.error_message}
+                          </span>
+                        </div>
                       ) : (
-                        <span className="text-zinc-600">—</span>
+                        <span className="text-text-tertiary">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-right text-zinc-500">
+                    <td className="px-4 py-3 text-right text-text-tertiary">
                       {timeAgo(item.created_at)}
                     </td>
                   </tr>
@@ -266,7 +271,7 @@ export default async function ActivityPage({
 
           {/* Pagination */}
           <div className="flex items-center justify-between">
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-text-tertiary">
               Showing {from + 1}–{Math.min(to + 1, totalCount)} of{" "}
               {totalCount} results
             </span>
@@ -276,12 +281,12 @@ export default async function ActivityPage({
                   href={buildFilterHref(baseParams, {
                     page: String(page - 1),
                   })}
-                  className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-300"
+                  className="rounded-md bg-surface-elevated px-3 py-1.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                 >
                   Previous
                 </Link>
               ) : (
-                <span className="cursor-not-allowed rounded-md bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-600">
+                <span className="cursor-not-allowed rounded-md bg-surface-elevated/50 px-3 py-1.5 text-xs text-text-tertiary">
                   Previous
                 </span>
               )}
@@ -290,12 +295,12 @@ export default async function ActivityPage({
                   href={buildFilterHref(baseParams, {
                     page: String(page + 1),
                   })}
-                  className="rounded-md bg-zinc-800 px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-zinc-300"
+                  className="rounded-md bg-surface-elevated px-3 py-1.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
                 >
                   Next
                 </Link>
               ) : (
-                <span className="cursor-not-allowed rounded-md bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-600">
+                <span className="cursor-not-allowed rounded-md bg-surface-elevated/50 px-3 py-1.5 text-xs text-text-tertiary">
                   Next
                 </span>
               )}
@@ -310,8 +315,8 @@ export default async function ActivityPage({
 function Header() {
   return (
     <div>
-      <h1 className="text-xl font-semibold text-zinc-100">Activity</h1>
-      <p className="mt-1 text-sm text-zinc-400">
+      <h1 className="text-xl font-semibold text-text-primary">Activity</h1>
+      <p className="mt-1 text-sm text-text-secondary">
         Every documentation update DocDrift has generated.
       </p>
     </div>
@@ -320,24 +325,26 @@ function Header() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 py-16">
-      <Activity className="h-10 w-10 text-zinc-600" />
-      <p className="mt-4 text-sm text-zinc-400">{message}</p>
+    <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16">
+      <Activity className="h-10 w-10 text-text-tertiary" />
+      <p className="mt-4 text-sm text-text-secondary">{message}</p>
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const variants: Record<string, string> = {
-    generated: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    skipped: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
-    error: "bg-red-500/10 text-red-400 border-red-500/20",
-    pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    generated:
+      "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+    skipped: "bg-surface-elevated text-text-secondary border border-border-subtle",
+    error: "bg-accent-red-soft text-accent-red border border-accent-red/20",
+    pending:
+      "bg-amber-500/10 text-amber-400 border border-amber-500/20",
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${
+      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
         variants[status] ?? variants.skipped
       }`}
     >

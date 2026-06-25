@@ -33,7 +33,6 @@ export default async function DashboardPage({
   const params = await searchParams;
   const showUpgradeBanner = params.upgraded === "true";
 
-  // Fetch the profile plan for the upgrade banner
   const { data: profile } = await supabase
     .from("profiles")
     .select("plan")
@@ -44,7 +43,6 @@ export default async function DashboardPage({
 
   const sevenDaysAgo = daysAgoISO(7);
 
-  // Fetch repo data and stat counts in parallel
   const [reposDataResult, reposCountResult, updatesResult, prsResult, errorsResult] =
     await Promise.all([
       supabase.from("repos").select("id, full_name, github_repo_id"),
@@ -81,13 +79,10 @@ export default async function DashboardPage({
     ])
   );
 
-  // Fetch recent activity filtered by the user's repo IDs
   const activityResult = repoIds.length > 0
     ? await supabase
         .from("doc_updates")
-        .select(
-          "id, github_pr_number, github_pr_title, status, created_at, repo_id"
-        )
+        .select("id, github_pr_number, github_pr_title, status, created_at, repo_id")
         .in("repo_id", repoIds)
         .order("created_at", { ascending: false })
         .limit(5)
@@ -110,118 +105,125 @@ export default async function DashboardPage({
     <div className="space-y-8">
       {showUpgradeBanner && <UpgradeBanner plan={plan} />}
 
-      <div>
-        <h1 className="text-xl font-semibold text-zinc-100">Dashboard</h1>
-        <p className="mt-1 text-sm text-zinc-400">
-          Overview of your documentation updates.
-        </p>
-      </div>
+      <PageHeader title="Dashboard" subtitle="Overview of your documentation updates." />
 
       {activeRepos === 0 ? (
-        <div className="rounded-xl border border-blue-500/30 bg-zinc-900 p-8 text-center">
-          <h2 className="text-lg font-semibold text-zinc-100">
+        <div className="rounded-lg border border-border-subtle bg-surface-card p-8 text-center">
+          <h2 className="text-lg font-semibold text-text-primary">
             Welcome to DocDrift 👋
           </h2>
-          <p className="mx-auto mt-2 max-w-md text-sm text-zinc-400">
+          <p className="mx-auto mt-2 max-w-md text-sm text-text-secondary">
             You&rsquo;re one step away from automated documentation. Connect
             your first GitHub repository to get started.
           </p>
           <Link
             href="/repos"
-            className="mt-4 inline-flex items-center rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+            className="mt-4 inline-flex items-center rounded-md bg-text-primary px-4 py-2 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
           >
             Connect your first repo
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Connected Repos"
             value={activeRepos}
-            icon={<GitBranch className="h-4 w-4" />}
+            icon={<GitBranch className="h-4 w-4 text-text-secondary" />}
           />
           <StatCard
             label="Updates This Week"
             value={totalUpdates}
-            icon={<FileText className="h-4 w-4" />}
+            icon={<FileText className="h-4 w-4 text-text-secondary" />}
           />
           <StatCard
             label="PRs Opened"
             value={prsOpened}
-            icon={<GitPullRequest className="h-4 w-4" />}
+            icon={<GitPullRequest className="h-4 w-4 text-text-secondary" />}
           />
           <StatCard
             label="Errors"
             value={errors}
-            icon={<AlertCircle className="h-4 w-4" />}
+            icon={<AlertCircle className="h-4 w-4 text-accent-red" />}
           />
         </div>
       )}
 
       {activeRepos > 0 && (
       <div>
-        <h2 className="text-sm font-medium text-zinc-300">Recent Activity</h2>
-        <div className="mt-3">
-          {recentActivity.length === 0 ? (
-            <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-8 text-center">
-              <p className="text-sm text-zinc-400">
-                No activity yet — merge a PR on a connected repository to see
-                DocDrift in action.
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-hidden rounded-lg border border-zinc-800">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
-                      Repository
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
-                      PR
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-zinc-400">
-                      When
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-800">
-                  {recentActivity.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="bg-zinc-900 transition-colors hover:bg-zinc-900/70"
-                    >
-                      <td className="max-w-48 truncate px-4 py-3 text-zinc-300">
-                        {item.repos?.full_name ?? "Unknown repo"}
-                      </td>
-                      <td className="px-4 py-3 text-zinc-400">
-                        <span className="text-zinc-300">
+        <h2 className="mb-3 text-sm font-semibold text-text-primary">Recent Activity</h2>
+        {recentActivity.length === 0 ? (
+          <div className="rounded-lg border border-border-subtle bg-surface-card p-8 text-center">
+            <p className="text-sm text-text-secondary">
+              No activity yet — merge a PR on a connected repository to see
+              DocDrift in action.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-lg border border-border-subtle">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border-subtle bg-surface-card">
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                    Repository
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                    PR
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                    When
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentActivity.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="border-b border-border-subtle/50 transition-colors duration-150 hover:bg-surface-card/50"
+                  >
+                    <td className="max-w-48 truncate px-4 py-3 text-text-primary">
+                      {item.repos?.full_name ?? "Unknown repo"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex max-w-xs items-center gap-1.5">
+                        <span className="shrink-0 font-mono font-semibold text-text-primary">
                           #{item.github_pr_number}
                         </span>
                         {item.github_pr_title && (
-                          <span className="ml-1.5 text-zinc-500">
+                          <span
+                            className="truncate text-text-secondary"
+                            title={item.github_pr_title}
+                          >
                             {item.github_pr_title}
                           </span>
                         )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <StatusBadge status={item.status} />
-                      </td>
-                      <td className="px-4 py-3 text-right text-zinc-500">
-                        {timeAgo(item.created_at)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={item.status} />
+                    </td>
+                    <td className="px-4 py-3 text-right text-text-tertiary">
+                      {timeAgo(item.created_at)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       )}
+    </div>
+  );
+}
+
+function PageHeader({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div className="mb-8">
+      <h1 className="text-xl font-semibold text-text-primary">{title}</h1>
+      <p className="mt-1 text-sm text-text-secondary">{subtitle}</p>
     </div>
   );
 }
@@ -236,31 +238,31 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
-      <div className="flex items-center gap-2 text-zinc-400">
-        {icon}
-        <span className="text-xs font-medium uppercase tracking-wider">
+    <div className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface-card p-4">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
           {label}
-        </span>
+        </p>
+        <p className="mt-1 text-2xl font-semibold text-text-primary">{value}</p>
       </div>
-      <div className="mt-2 text-2xl font-semibold tabular-nums text-zinc-100">
-        {value}
-      </div>
+      <div className="rounded-md bg-surface-elevated p-2">{icon}</div>
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const variants: Record<string, string> = {
-    generated: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    skipped: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
-    error: "bg-red-500/10 text-red-400 border-red-500/20",
-    pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    generated:
+      "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+    skipped: "bg-surface-elevated text-text-secondary border border-border-subtle",
+    error: "bg-accent-red-soft text-accent-red border border-accent-red/20",
+    pending:
+      "bg-amber-500/10 text-amber-400 border border-amber-500/20",
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${
+      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
         variants[status] ?? variants.skipped
       }`}
     >

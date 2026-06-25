@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
+import { GitBranch } from "lucide-react";
 
 /**
  * Landing page navigation bar. Checks the Supabase session server-side
@@ -13,22 +14,23 @@ export default async function Nav() {
   const isLoggedIn = !!user;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
+    <nav className="sticky top-0 z-50 border-b border-border-subtle bg-surface-page/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="text-base font-bold text-zinc-100">
-          DocDrift
+        <Link href="/" className="flex items-center gap-2 text-text-primary">
+          <GitBranch className="h-[18px] w-[18px] text-accent-blue" />
+          <span className="text-sm font-semibold">DocDrift</span>
         </Link>
         <div className="flex items-center gap-4">
           <Link
             href="/pricing"
-            className="text-sm text-zinc-400 transition-colors hover:text-zinc-200"
+            className="text-sm font-medium text-text-secondary transition-colors duration-150 hover:text-text-primary"
           >
             Pricing
           </Link>
           {isLoggedIn ? (
             <Link
               href="/dashboard"
-              className="rounded-md bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+              className="rounded-md bg-text-primary px-4 py-1.5 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
             >
               Dashboard
             </Link>
@@ -36,13 +38,13 @@ export default async function Nav() {
             <>
               <Link
                 href="/login"
-                className="text-sm text-zinc-400 transition-colors hover:text-zinc-200"
+                className="text-sm font-medium text-text-secondary transition-colors duration-150 hover:text-text-primary"
               >
                 Sign in
               </Link>
               <Link
                 href="/login"
-                className="rounded-md bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+                className="rounded-md bg-text-primary px-4 py-1.5 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
               >
                 Get started
               </Link>

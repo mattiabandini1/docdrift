@@ -31,7 +31,7 @@ export default function ManageSubscriptionButton() {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="inline-flex items-center rounded-md border border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+      className="inline-flex items-center rounded-md border border-border-subtle bg-transparent px-3 py-1.5 text-xs font-semibold text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-50"
     >
       {loading ? "Loading..." : "Manage subscription"}
     </button>

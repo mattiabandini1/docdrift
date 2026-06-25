@@ -66,13 +66,13 @@ export default function RepoCard({ repo }: RepoCardProps) {
   };
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4 transition-colors hover:border-zinc-700">
+    <div className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface-card p-4 transition-colors duration-150 hover:border-border-strong">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-3">
-          <span className="truncate text-sm font-medium text-zinc-100">
+          <span className="truncate text-sm font-semibold text-text-primary">
             {repo.full_name ?? `#${repo.github_repo_id}`}
           </span>
-          <span className="inline-flex shrink-0 items-center rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400">
+          <span className="inline-flex shrink-0 items-center rounded-full border border-border-subtle bg-surface-elevated px-2 py-0.5 text-xs font-medium text-text-secondary">
             {repo.doc_mode}
           </span>
         </div>
@@ -81,7 +81,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
             {repo.doc_paths.map((path) => (
               <span
                 key={path}
-                className="inline-flex items-center rounded border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-xs text-zinc-500 font-mono"
+                className="inline-flex items-center rounded border border-border-subtle bg-surface-elevated px-1.5 py-0.5 font-mono text-xs text-text-tertiary"
               >
                 {path}
               </span>
@@ -94,14 +94,14 @@ export default function RepoCard({ repo }: RepoCardProps) {
         <button
           onClick={handleToggle}
           disabled={isToggling}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-            active
-              ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
-              : "bg-zinc-800 text-zinc-500 hover:bg-zinc-700 hover:text-zinc-400"
+              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-colors duration-150 ${
+                active
+                  ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                  : "bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary"
           }`}
         >
           {isToggling ? (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-400 border-t-transparent" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-text-secondary border-t-transparent" />
           ) : active ? (
             <>
               <Power className="h-3.5 w-3.5" />
@@ -116,7 +116,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
         </button>
 
         <button
-          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-text-tertiary transition-colors duration-150 hover:bg-surface-elevated hover:text-text-secondary"
           aria-label="Configure repository"
         >
           <Settings className="h-3.5 w-3.5" />
@@ -126,7 +126,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
         <button
           onClick={handleRemove}
           disabled={isRemoving}
-          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-500/10 hover:text-red-400"
+          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-text-tertiary transition-colors duration-150 hover:bg-accent-red-soft hover:text-accent-red"
           aria-label="Remove repository"
         >
           <Trash2 className="h-3.5 w-3.5" />

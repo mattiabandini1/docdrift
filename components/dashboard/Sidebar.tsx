@@ -32,13 +32,13 @@ export default function Sidebar({ email }: SidebarProps) {
   };
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950">
-      <div className="flex h-14 shrink-0 items-center gap-2 border-b border-zinc-800 px-4">
-        <span className="text-base font-bold text-zinc-100">DocDrift</span>
-        <span className="text-xs text-zinc-500">docs that keep up</span>
+    <aside className="flex w-56 shrink-0 flex-col border-r border-border-subtle bg-surface-card">
+      <div className="flex flex-col gap-0.5 border-b border-border-subtle px-4 py-4">
+        <span className="text-sm font-semibold text-text-primary">DocDrift</span>
+        <span className="text-xs text-text-tertiary">docs that keep up</span>
       </div>
 
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex-1 space-y-1 p-2">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -46,10 +46,10 @@ export default function Sidebar({ email }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+              className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150 ${
                 isActive
-                  ? "bg-zinc-800 text-white"
-                  : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100"
+                  ? "bg-surface-elevated text-text-primary"
+                  : "text-text-secondary hover:bg-surface-hover hover:text-text-primary"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -59,11 +59,11 @@ export default function Sidebar({ email }: SidebarProps) {
         })}
       </nav>
 
-      <div className="shrink-0 border-t border-zinc-800 p-3">
-        <p className="truncate text-xs text-zinc-400">{email}</p>
+      <div className="shrink-0 border-t border-border-subtle px-4 py-3">
+        <p className="max-w-full truncate text-xs text-text-tertiary">{email}</p>
         <button
           onClick={handleSignOut}
-          className="mt-1.5 text-xs text-zinc-500 transition-colors hover:text-zinc-300"
+          className="mt-1.5 text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary"
         >
           Sign out
         </button>

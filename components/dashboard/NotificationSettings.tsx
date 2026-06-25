@@ -58,11 +58,11 @@ export default function NotificationSettings({
       <div>
         <label
           htmlFor="notification-email"
-          className="block text-sm font-medium text-zinc-300"
+          className="block text-sm font-semibold text-text-primary"
         >
           Notification email
         </label>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-text-tertiary">
           DocDrift will send updates to this address
         </p>
         <div className="mt-2 flex gap-2">
@@ -71,22 +71,22 @@ export default function NotificationSettings({
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full max-w-sm rounded-md border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none"
+            className="block w-full max-w-sm rounded-md border border-border-subtle bg-surface-elevated px-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:border-border-strong focus:outline-none"
           />
           <button
             onClick={handleSave}
             disabled={isPending || !email}
-            className="inline-flex items-center rounded-md bg-zinc-100 px-4 py-1.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center rounded-md bg-text-primary px-4 py-1.5 text-sm font-semibold text-surface-page transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isPending ? "Saving…" : "Save"}
           </button>
         </div>
         {feedback && (
           <p
-            className={`mt-1 text-xs ${
+            className={`mt-1 text-xs font-semibold ${
               feedback.type === "success"
                 ? "text-emerald-400"
-                : "text-red-400"
+                : "text-accent-red"
             }`}
           >
             {feedback.type === "success" ? "✓ " : "✗ "}

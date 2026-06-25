@@ -41,10 +41,10 @@ export default function UpgradeButton({ plan, label, className = "" }: UpgradeBu
     <button
       onClick={handleClick}
       disabled={loading}
-      className={
-        className ||
-        "mt-8 block w-full rounded-md bg-zinc-100 py-2.5 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
-      }
+        className={
+          className ||
+          "mt-8 block w-full rounded-md bg-text-primary py-2.5 text-center text-sm font-semibold text-surface-page transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+        }
     >
       {loading ? "Loading..." : label}
     </button>

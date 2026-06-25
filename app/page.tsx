@@ -9,98 +9,185 @@ export const metadata: Metadata = {
     "DocDrift watches your GitHub PRs and automatically opens a documentation PR every time your code changes.",
 };
 
-/**
- * DocDrift public homepage. Static landing page with hero, how-it-works,
- * problem/solution, pricing preview, and footer.
- */
 export default function Homepage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-surface-page text-text-primary">
       <Nav />
 
       {/* Hero */}
-      <section className="py-24 text-center">
-        <div className="mx-auto max-w-6xl px-6">
-          <p className="text-sm text-zinc-400">Stop writing docs. Start shipping.</p>
-          <h1 className="mt-4 text-5xl font-bold md:text-6xl">
-            Your documentation updates itself.
+      <section className="relative overflow-hidden pt-48 pb-40 text-center">
+        <div
+          className="pointer-events-none absolute inset-0 -top-24"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.08) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-6xl px-6">
+          {/* Eyebrow */}
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent-blue" />
+            Now in public beta
+          </span>
+
+          {/* Headline */}
+          <h1 className="mt-6 font-bold tracking-tight leading-none text-text-primary">
+            <span className="text-5xl md:text-7xl">Your docs update<br /></span>
+            <span className="bg-gradient-to-r from-accent-blue to-blue-500 bg-clip-text text-5xl md:text-7xl text-transparent">
+              themselves.
+            </span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-zinc-400">
+
+          {/* Subheadline */}
+          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-text-secondary">
             DocDrift watches your GitHub PRs and automatically opens a
             documentation PR every time your code changes. No more stale
             READMEs.
           </p>
-          <div className="mt-8 flex items-center justify-center gap-4">
+
+          {/* CTAs */}
+          <div className="mt-10 flex items-center justify-center gap-3">
             <Link
               href="/login"
-              className="rounded-md bg-zinc-100 px-5 py-2.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+              className="inline-flex items-center rounded-md bg-text-primary px-6 py-2.5 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
             >
               Get started free
             </Link>
             <a
               href="#how-it-works"
-              className="rounded-md border border-zinc-700 px-5 py-2.5 text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+              className="inline-flex items-center rounded-md border border-border-strong bg-transparent px-6 py-2.5 text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-text-secondary hover:bg-surface-elevated"
             >
               See how it works
             </a>
           </div>
-          <p className="mt-4 text-xs text-zinc-500">
-            Free plan available · No credit card required for first 10 updates
+          <p className="mt-4 text-xs text-text-tertiary">
+            Free plan available · No credit card required
           </p>
+
+          {/* Terminal mockup */}
+          <div className="mx-auto mt-16 max-w-2xl overflow-hidden rounded-lg border border-border-subtle bg-surface-card">
+            <div className="flex items-center gap-1.5 border-b border-border-subtle px-4 py-3">
+              <div className="h-3 w-3 rounded-full bg-accent-red" />
+              <div className="h-3 w-3 rounded-full bg-yellow-400/80" />
+              <div className="h-3 w-3 rounded-full bg-accent-green" />
+              <span className="ml-2 text-xs text-text-tertiary">
+                github.com/yourname/project
+              </span>
+            </div>
+            <div className="space-y-2 p-6 font-mono text-sm">
+              <div className="text-text-tertiary">
+                {"//"} PR #47 merged: &quot;Add authentication middleware&quot;
+              </div>
+              <div className="text-text-secondary">
+                <span className="text-accent-green">✓</span> DocDrift detected
+                changes in{" "}
+                <span className="text-accent-blue">src/auth.ts</span>
+              </div>
+              <div className="text-text-secondary">
+                <span className="text-accent-green">✓</span> Matched
+                documentation section:{" "}
+                <span className="text-accent-blue">
+                  README.md#authentication
+                </span>
+              </div>
+              <div className="text-text-secondary">
+                <span className="text-accent-green">✓</span> Generated
+                documentation update
+              </div>
+              <div className="mt-3 text-text-secondary">
+                <span className="text-purple-400">→</span> Opened PR #48:{" "}
+                <span className="text-text-primary">
+                  &quot;docs: update authentication section&quot;
+                </span>
+              </div>
+              <div className="mt-1 text-xs text-text-tertiary">
+                docdrift/update-47 → main · just now
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Social proof */}
-      <section className="border-y border-zinc-800 bg-zinc-900/50 py-6 text-center">
-        <p className="text-sm text-zinc-400">
-          Join developers who ship code without worrying about docs
-        </p>
-      </section>
-
       {/* How it works */}
-      <section id="how-it-works" className="py-24">
+      <section id="how-it-works" className="py-40">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-semibold">How DocDrift works</h2>
-          <p className="mt-2 text-center text-zinc-400">
-            Three steps. Zero effort.
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
+            How it works
           </p>
-          <div className="mt-16 grid gap-8 sm:grid-cols-3">
-            <div className="text-center">
-              <GitBranch className="mx-auto h-10 w-10 text-zinc-400" />
-              <h3 className="mt-4 text-lg font-medium">Connect your repo</h3>
-              <p className="mt-2 text-sm text-zinc-400">
-                Install the DocDrift GitHub App on any repository in under 2
-                minutes.
-              </p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
+            Three steps. Zero effort.
+          </h2>
+          <div className="mt-14 grid gap-4 sm:grid-cols-3">
+            <div className="relative flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 transition-colors duration-150 hover:border-border-strong">
+              <span className="absolute right-4 top-4 font-mono text-xs text-text-tertiary">
+                01
+              </span>
+              <div className="w-fit rounded-md bg-surface-elevated p-2">
+                <GitBranch className="h-5 w-5 text-accent-blue" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-text-primary">
+                  Connect your repo
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                  Install the DocDrift GitHub App on any repository in under 2
+                  minutes.
+                </p>
+              </div>
             </div>
-            <div className="text-center">
-              <GitMerge className="mx-auto h-10 w-10 text-zinc-400" />
-              <h3 className="mt-4 text-lg font-medium">Merge your PR</h3>
-              <p className="mt-2 text-sm text-zinc-400">
-                DocDrift watches every merged PR and analyzes what changed in
-                your code.
-              </p>
+
+            <div className="relative flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 transition-colors duration-150 hover:border-border-strong">
+              <span className="absolute right-4 top-4 font-mono text-xs text-text-tertiary">
+                02
+              </span>
+              <div className="w-fit rounded-md bg-surface-elevated p-2">
+                <GitMerge className="h-5 w-5 text-accent-blue" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-text-primary">
+                  Merge your PR
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                  DocDrift watches every merged PR and analyzes what changed in
+                  your code.
+                </p>
+              </div>
             </div>
-            <div className="text-center">
-              <FileCheck className="mx-auto h-10 w-10 text-zinc-400" />
-              <h3 className="mt-4 text-lg font-medium">Review the doc PR</h3>
-              <p className="mt-2 text-sm text-zinc-400">
-                A documentation PR appears automatically. Review, tweak if
-                needed, merge.
-              </p>
+
+            <div className="relative flex flex-col gap-4 rounded-lg border border-border-subtle bg-surface-card p-6 transition-colors duration-150 hover:border-border-strong">
+              <span className="absolute right-4 top-4 font-mono text-xs text-text-tertiary">
+                03
+              </span>
+              <div className="w-fit rounded-md bg-surface-elevated p-2">
+                <FileCheck className="h-5 w-5 text-accent-blue" />
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-text-primary">
+                  Review the doc PR
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                  A documentation PR appears automatically. Review, tweak if
+                  needed, merge.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Problem / Solution */}
-      <section className="py-24">
+      <section className="py-40">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="grid gap-8 lg:grid-cols-2">
-            {/* Problem */}
-            <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-8">
-              <h3 className="text-lg font-semibold text-red-400">
-                The problem with documentation
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
+            Why DocDrift
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
+            Stop writing docs. Start shipping.
+          </h2>
+          <div className="mt-14 grid gap-8 md:grid-cols-2">
+            <div>
+              <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide">
+                Without DocDrift
               </h3>
               <ul className="mt-4 space-y-3">
                 {[
@@ -109,18 +196,16 @@ export default function Homepage() {
                   "New team members get lost in outdated docs",
                   "Documentation debt compounds silently",
                 ].map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm text-zinc-300">
-                    <X className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                  <li key={text} className="flex items-start gap-3 text-sm text-text-secondary">
+                    <X className="mt-0.5 h-4 w-4 shrink-0 text-accent-red" />
                     {text}
                   </li>
                 ))}
               </ul>
             </div>
-
-            {/* Solution */}
-            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-8">
-              <h3 className="text-lg font-semibold text-emerald-400">
-                DocDrift fixes this automatically
+            <div>
+              <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wide">
+                With DocDrift
               </h3>
               <ul className="mt-4 space-y-3">
                 {[
@@ -129,8 +214,8 @@ export default function Homepage() {
                   "You stay in control — review before merging",
                   "Documentation stays accurate, always",
                 ].map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm text-zinc-300">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                  <li key={text} className="flex items-start gap-3 text-sm text-text-secondary">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-green" />
                     {text}
                   </li>
                 ))}
@@ -141,23 +226,30 @@ export default function Homepage() {
       </section>
 
       {/* Pricing preview */}
-      <section className="py-24">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center text-3xl font-semibold">Simple pricing</h2>
-          <p className="mt-2 text-center text-zinc-400">
-            Start free, upgrade when you&rsquo;re ready
+      <section className="py-40">
+        <div className="mx-auto max-w-5xl px-6">
+          <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
+            Pricing
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
+            Simple pricing. No surprises.
+          </h2>
+          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* Free */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8">
-              <span className="inline-flex items-center rounded-full border border-zinc-700 bg-zinc-800 px-2.5 py-0.5 text-xs text-zinc-400">
+            <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">
                 Free forever
               </span>
-              <p className="mt-4 text-4xl font-bold">$0<span className="text-lg font-normal text-zinc-400">/month</span></p>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-5 text-5xl font-bold tracking-tight text-text-primary">
+                $0
+                <span className="ml-1 text-lg font-medium text-text-tertiary">
+                  /month
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-text-secondary">
                 Perfect for trying DocDrift
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "1 repository", included: true },
                   { text: "10 documentation updates/month", included: true },
@@ -165,15 +257,14 @@ export default function Homepage() {
                   { text: "Email notifications", included: true },
                   { text: "Unlimited updates", included: false },
                   { text: "Multiple repositories", included: false },
-                  { text: "Priority support", included: false },
                 ].map(({ text, included }) => (
-                  <li key={text} className="flex items-start gap-3 text-sm">
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
                     {included ? (
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
                     ) : (
-                      <X className="mt-0.5 h-4 w-4 shrink-0 text-zinc-600" />
+                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-text-tertiary" />
                     )}
-                    <span className={included ? "text-zinc-300" : "text-zinc-500"}>
+                    <span className={included ? "text-text-primary" : "text-text-tertiary"}>
                       {text}
                     </span>
                   </li>
@@ -181,37 +272,41 @@ export default function Homepage() {
               </ul>
               <Link
                 href="/login"
-                className="mt-8 block rounded-md border border-zinc-700 py-2.5 text-center text-sm font-medium text-zinc-300 transition-colors hover:border-zinc-500 hover:text-zinc-100"
+                className="mt-6 block rounded-md border border-border-strong bg-transparent py-2.5 text-center text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-text-secondary hover:bg-surface-elevated"
               >
                 Get started
               </Link>
             </div>
 
             {/* Starter */}
-            <div className="rounded-xl border border-blue-500/30 bg-zinc-900 p-8 ring-1 ring-blue-500">
-              <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-xs text-blue-400">
+            <div className="flex flex-col rounded-lg border border-border-strong bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-accent-blue/20 bg-accent-blue/10 px-2.5 py-0.5 text-xs font-semibold text-accent-blue">
                 Most popular
               </span>
-              <p className="mt-4 text-4xl font-bold">$12<span className="text-lg font-normal text-zinc-400">/month</span></p>
-              <p className="mt-2 text-sm text-zinc-400">
+              <p className="mt-5 text-5xl font-bold tracking-tight text-text-primary">
+                $12
+                <span className="ml-1 text-lg font-medium text-text-tertiary">
+                  /month
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-text-secondary">
                 For active solo developers
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "3 repositories", included: true },
                   { text: "Unlimited documentation updates", included: true },
                   { text: "GitHub PR integration", included: true },
                   { text: "Email notifications", included: true },
-                  { text: "Multiple repositories", included: false },
                   { text: "Priority support", included: false },
                 ].map(({ text, included }) => (
-                  <li key={text} className="flex items-start gap-3 text-sm">
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
                     {included ? (
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
                     ) : (
-                      <X className="mt-0.5 h-4 w-4 shrink-0 text-zinc-600" />
+                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-text-tertiary" />
                     )}
-                    <span className={included ? "text-zinc-300" : "text-zinc-500"}>
+                    <span className={included ? "text-text-primary" : "text-text-tertiary"}>
                       {text}
                     </span>
                   </li>
@@ -219,11 +314,51 @@ export default function Homepage() {
               </ul>
               <Link
                 href="/login"
-                className="mt-8 block rounded-md bg-zinc-100 py-2.5 text-center text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-200"
+                className="mt-6 block rounded-md bg-text-primary py-2.5 text-center text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
               >
                 Start free trial
               </Link>
-              <p className="mt-3 text-center text-xs text-zinc-500">
+              <p className="mt-3 text-center text-xs text-text-tertiary">
+                7-day free trial · Cancel anytime
+              </p>
+            </div>
+
+            {/* Pro */}
+            <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
+              <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">
+                Pro
+              </span>
+              <p className="mt-5 text-5xl font-bold tracking-tight text-text-primary">
+                $29
+                <span className="ml-1 text-lg font-medium text-text-tertiary">
+                  /month
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-text-secondary">
+                For teams and power users
+              </p>
+              <ul className="mt-5 flex-1 space-y-2">
+                {[
+                  "Unlimited repositories",
+                  "Unlimited documentation updates",
+                  "GitHub PR integration",
+                  "Email notifications",
+                  "Priority support",
+                  "Early access to new features",
+                ].map((text) => (
+                  <li key={text} className="flex items-start gap-3 text-sm leading-snug">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
+                    <span className="text-text-primary">{text}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/login"
+                className="mt-6 block rounded-md border border-border-strong bg-transparent py-2.5 text-center text-sm font-semibold text-text-primary transition-colors duration-150 hover:border-text-secondary hover:bg-surface-elevated"
+              >
+                Start free trial
+              </Link>
+              <p className="mt-3 text-center text-xs text-text-tertiary">
                 7-day free trial · Cancel anytime
               </p>
             </div>
@@ -231,26 +366,35 @@ export default function Homepage() {
           <div className="mt-8 text-center">
             <Link
               href="/pricing"
-              className="text-sm text-zinc-400 underline transition-colors hover:text-zinc-300"
+              className="text-sm text-text-secondary underline transition-colors duration-150 hover:text-text-primary"
             >
-              See full pricing →
+              Compare all plans →
             </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800 py-8">
+      <footer className="border-t border-border-subtle py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <p className="text-xs text-zinc-500">© 2026 DocDrift</p>
+          <p className="text-xs text-text-tertiary">© 2026 DocDrift</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
+            <a
+              href="#"
+              className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary"
+            >
               Privacy
             </a>
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
+            <a
+              href="#"
+              className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary"
+            >
               Terms
             </a>
-            <a href="#" className="text-xs text-zinc-500 transition-colors hover:text-zinc-400">
+            <a
+              href="#"
+              className="text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary"
+            >
               GitHub
             </a>
           </div>

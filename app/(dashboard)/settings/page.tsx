@@ -6,8 +6,8 @@ import DeleteAccount from "@/components/dashboard/DeleteAccount";
 import ManageSubscriptionButton from "@/components/dashboard/ManageSubscriptionButton";
 
 const PLAN_BADGES: Record<string, string> = {
-  free: "bg-zinc-800 text-zinc-400",
-  starter: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  free: "bg-surface-elevated text-text-secondary border-border-subtle",
+  starter: "bg-accent-blue/10 text-accent-blue border-accent-blue/20",
   pro: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
@@ -42,33 +42,33 @@ export default async function SettingsPage() {
     PLAN_BADGES[plan] ?? PLAN_BADGES.free;
 
   return (
-    <div className="space-y-10">
+    <div className="max-w-2xl space-y-10">
       <div>
-        <h1 className="text-xl font-semibold text-zinc-100">Settings</h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <h1 className="text-xl font-semibold text-text-primary">Settings</h1>
+        <p className="mt-1 text-sm text-text-secondary">
           Manage your DocDrift account.
         </p>
       </div>
 
       {/* Section 1 — Account */}
       <section className="space-y-4">
-        <h2 className="text-sm font-medium text-zinc-300">Account</h2>
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
+        <h2 className="text-sm font-semibold text-text-primary">Account</h2>
+        <div className="rounded-lg border border-border-subtle bg-surface-card p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-zinc-500">Email address</p>
-              <p className="text-sm text-zinc-200">{email}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">Email address</p>
+              <p className="mt-0.5 text-sm text-text-primary">{email}</p>
             </div>
             <div className="flex items-center gap-4">
               <span
-                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${planBadge}`}
+                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${planBadge}`}
               >
                 {plan}
               </span>
               {plan === "free" && (
                 <Link
                   href="/pricing"
-                  className="text-xs text-zinc-400 underline hover:text-zinc-300"
+                  className="text-xs font-semibold text-text-secondary underline hover:text-text-primary"
                 >
                   Upgrade plan
                 </Link>
@@ -83,18 +83,18 @@ export default async function SettingsPage() {
 
       {/* Section 2 — Notifications */}
       <section className="space-y-4">
-        <h2 className="text-sm font-medium text-zinc-300">Notifications</h2>
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
+        <h2 className="text-sm font-semibold text-text-primary">Notifications</h2>
+        <div className="rounded-lg border border-border-subtle bg-surface-card p-4">
           <NotificationSettings currentEmail={notificationEmail} />
         </div>
       </section>
 
       {/* Section 3 — Danger Zone */}
       <section className="space-y-4">
-        <h2 className="text-sm font-medium text-red-400">Danger zone</h2>
-        <div className="rounded-lg border border-red-500/20 bg-zinc-900 p-4">
-          <p className="text-sm font-medium text-red-400">Delete account</p>
-          <p className="mt-1 text-xs text-zinc-500">
+        <h2 className="text-sm font-semibold text-accent-red">Danger zone</h2>
+        <div className="rounded-lg border border-accent-red/20 bg-surface-card p-4">
+          <p className="text-sm font-semibold text-accent-red">Delete account</p>
+          <p className="mt-1 text-xs text-text-secondary">
             This will permanently delete your account, all connected
             repositories, and all activity history. This action cannot be
             undone.
