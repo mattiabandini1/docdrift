@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { GitBranch } from "lucide-react";
+import Image from "next/image";
 
 /**
  * Landing page navigation bar. Checks the Supabase session server-side
@@ -17,8 +17,14 @@ export default async function Nav() {
     <nav className="sticky top-0 z-50 border-b border-border-subtle bg-surface-page/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 text-text-primary">
-          <GitBranch className="h-[18px] w-[18px] text-accent-blue" />
-          <span className="text-sm font-semibold">DocDrift</span>
+          <Image
+            src="/images/logo/white_logo2_nobg.png"
+            alt="DocDrift"
+            width={28}
+            height={28}
+            className="object-contain"
+          />
+          <span className="text-sm font-semibold text-zinc-50">DocDrift</span>
         </Link>
         <div className="flex items-center gap-4">
           <Link

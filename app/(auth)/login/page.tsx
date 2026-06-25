@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { GitBranch } from "lucide-react";
+import Image from "next/image";
 
 /**
  * Minimal login page that initiates GitHub OAuth via Supabase Auth.
@@ -25,9 +25,15 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.04)_0%,transparent_70%)] bg-zinc-950 px-6 py-12">
       <div className="w-full max-w-sm space-y-6 rounded-lg border border-zinc-800 bg-zinc-900 p-8 text-center">
-        <div className="flex items-center justify-center gap-2">
-          <GitBranch className="h-5 w-5 text-blue-500" />
-          <span className="text-base font-semibold text-zinc-50">DocDrift</span>
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <Image
+            src="/images/logo/white_logo2_nobg.png"
+            alt="DocDrift"
+            width={32}
+            height={32}
+            className="object-contain"
+          />
+          <span className="text-lg font-semibold text-zinc-50">DocDrift</span>
         </div>
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">
           Sign in to DocDrift

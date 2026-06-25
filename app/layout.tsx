@@ -29,6 +29,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "DocDrift" }],
   creator: "DocDrift",
+  icons: {
+    icon: "/images/logo/dark_logo2.png",
+    shortcut: "/images/logo/dark_logo2.png",
+    apple: "/images/logo/dark_logo2.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -39,9 +44,9 @@ export const metadata: Metadata = {
       "Automated GitHub documentation updates. Every PR, every time.",
     images: [
       {
-        url: `${appUrl}/og-image.png`,
-        width: 1200,
-        height: 630,
+        url: `${appUrl}/images/logo/dark_logo_nobg.png`,
+        width: 1080,
+        height: 1080,
         alt: "DocDrift",
       },
     ],
@@ -51,7 +56,7 @@ export const metadata: Metadata = {
     title: "DocDrift — Documentation that keeps up with your code",
     description:
       "Automated GitHub documentation updates. Every PR, every time.",
-    images: [`${appUrl}/og-image.png`],
+    images: [`${appUrl}/images/logo/dark_logo_nobg.png`],
   },
   robots: {
     index: true,

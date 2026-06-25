@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { GitBranch, GitMerge, FileCheck, Check, X } from "lucide-react";
 import Nav from "@/components/landing/Nav";
 
@@ -366,7 +367,7 @@ export default function Homepage() {
           <div className="mt-8 text-center">
             <Link
               href="/pricing"
-              className="text-sm text-text-secondary underline transition-colors duration-150 hover:text-text-primary"
+              className="text-sm text-zinc-400 hover:text-zinc-50 transition-colors"
             >
               Compare all plans →
             </Link>
@@ -377,7 +378,16 @@ export default function Homepage() {
       {/* Footer */}
       <footer className="border-t border-border-subtle py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
-          <p className="text-xs text-text-tertiary">© 2026 DocDrift</p>
+          <div className="flex items-center gap-1.5">
+            <Image
+              src="/images/logo/white_logo2_nobg.png"
+              alt=""
+              width={16}
+              height={16}
+              className="object-contain opacity-60"
+            />
+            <span className="text-xs text-text-tertiary">© 2026 DocDrift</span>
+          </div>
           <div className="flex items-center gap-6">
             <a
               href="#"

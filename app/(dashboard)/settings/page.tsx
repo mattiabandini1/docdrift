@@ -43,9 +43,9 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-2xl space-y-10">
-      <div>
-        <h1 className="text-xl font-semibold text-text-primary">Settings</h1>
-        <p className="mt-1 text-sm text-text-secondary">
+      <div className="mb-8">
+        <h1 className="text-xl font-semibold text-zinc-50">Settings</h1>
+        <p className="mt-1 text-sm text-zinc-500">
           Manage your DocDrift account.
         </p>
       </div>

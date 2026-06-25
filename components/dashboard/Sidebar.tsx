@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { LayoutDashboard, GitBranch, Activity, Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -33,9 +34,18 @@ export default function Sidebar({ email }: SidebarProps) {
 
   return (
     <aside className="flex w-56 shrink-0 flex-col border-r border-border-subtle bg-surface-card overflow-visible">
-      <div className="flex flex-col gap-0.5 border-b border-border-subtle px-4 py-4">
-        <span className="text-sm font-semibold text-text-primary whitespace-nowrap">DocDrift</span>
-        <span className="text-xs text-text-tertiary whitespace-nowrap">docs that keep up</span>
+      <div className="flex items-center gap-2.5 border-b border-border-subtle px-4 py-4">
+        <Image
+          src="/images/logo/white_logo2_nobg.png"
+          alt="DocDrift"
+          width={24}
+          height={24}
+          className="object-contain"
+        />
+        <div>
+          <p className="text-sm font-semibold text-text-primary leading-none whitespace-nowrap">DocDrift</p>
+          <p className="text-xs text-text-tertiary leading-none mt-0.5 whitespace-nowrap">docs that keep up</p>
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 p-2">

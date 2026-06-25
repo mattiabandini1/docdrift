@@ -312,9 +312,9 @@ export default async function ActivityPage({
 
 function Header() {
   return (
-    <div>
-      <h1 className="text-xl font-semibold text-text-primary">Activity</h1>
-      <p className="mt-1 text-sm text-text-secondary">
+    <div className="mb-8">
+      <h1 className="text-xl font-semibold text-zinc-50">Activity</h1>
+      <p className="mt-1 text-sm text-zinc-500">
         Every documentation update DocDrift has generated.
       </p>
     </div>
@@ -323,9 +323,11 @@ function Header() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16">
-      <Activity className="h-10 w-10 text-text-tertiary" />
-      <p className="mt-4 text-sm text-text-secondary">{message}</p>
+    <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16 gap-4">
+      <Activity className="h-10 w-10 text-zinc-700" />
+      <div className="text-center">
+        <p className="text-sm font-medium text-zinc-400">{message}</p>
+      </div>
     </div>
   );
 }

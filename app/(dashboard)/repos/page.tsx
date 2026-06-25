@@ -46,10 +46,10 @@ export default async function ReposPage({
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-text-primary">
+          <h1 className="text-xl font-semibold text-zinc-50">
             Repositories
           </h1>
-          <p className="mt-1 text-sm text-text-secondary">
+          <p className="mt-1 text-sm text-zinc-500">
             Connect your GitHub repositories to auto-sync documentation.
           </p>
         </div>
@@ -83,14 +83,16 @@ export default async function ReposPage({
 
       {/* Repo list or empty state */}
       {repoList.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16">
-          <GitBranch className="h-10 w-10 text-text-tertiary" />
-          <p className="mt-4 text-sm text-text-secondary">
-            No repositories connected yet
-          </p>
-          <p className="mt-1 text-xs text-text-tertiary">
-            Click &ldquo;Connect Repository&rdquo; to get started
-          </p>
+        <div className="flex flex-col items-center justify-center rounded-lg border border-border-subtle bg-surface-card py-16 gap-4">
+          <GitBranch className="h-10 w-10 text-zinc-700" />
+          <div className="text-center">
+            <p className="text-sm font-medium text-zinc-400">
+              No repositories connected yet
+            </p>
+            <p className="text-xs text-zinc-600 mt-1">
+              Click &ldquo;Connect Repository&rdquo; to get started
+            </p>
+          </div>
           <a
             href={GITHUB_APP_INSTALL_URL}
             target="_blank"
