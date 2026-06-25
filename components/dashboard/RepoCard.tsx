@@ -38,7 +38,9 @@ export default function RepoCard({ repo }: RepoCardProps) {
           body: JSON.stringify({ is_active: newValue }),
         });
         if (!res.ok) {
+          const data = (await res.json()) as { error?: string };
           setActive(!newValue);
+          alert(data.error ?? "Something went wrong");
         }
       } catch {
         setActive(!newValue);

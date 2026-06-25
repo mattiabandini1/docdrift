@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
+import { PLAN_LIMITS } from "@/lib/plans";
 
 const patchSchema = z.object({
   is_active: z.boolean(),
@@ -66,6 +67,34 @@ export async function PATCH(
       { error: "Forbidden", code: "FORBIDDEN" },
       { status: 403 }
     );
+  }
+
+  // Plan enforcement: check repo limit when activating
+  if (parsed.data.is_active) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("plan")
+      .eq("id", user.id)
+      .single();
+
+    const { count: activeCount } = await supabase
+      .from("repos")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("is_active", true);
+
+    const plan = (profile?.plan as keyof typeof PLAN_LIMITS) ?? "free";
+    const limit = PLAN_LIMITS[plan].repos;
+
+    if (activeCount !== null && activeCount >= limit) {
+      return NextResponse.json(
+        {
+          error: `Your ${plan} plan allows a maximum of ${limit} active ${limit === 1 ? "repository" : "repositories"}. Upgrade to connect more.`,
+          code: "REPO_LIMIT_REACHED",
+        },
+        { status: 403 }
+      );
+    }
   }
 
   // Update is_active
