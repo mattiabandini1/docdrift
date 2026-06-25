@@ -15,7 +15,7 @@ const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://getdocdrift.com";
 
 export const metadata: Metadata = {
   title: {
-    default: "DocDrift — Documentation that keeps up with your code",
+    default: "DocDrift",
     template: "%s | DocDrift",
   },
   description:
