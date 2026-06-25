@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Power, PowerOff, Settings, Trash2 } from "lucide-react";
+import ConfigureRepoModal from "@/components/dashboard/ConfigureRepoModal";
 
 export interface RepoCardData {
   id: string;
@@ -26,6 +27,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
   const [active, setActive] = useState(repo.is_active);
   const [isToggling, startToggle] = useTransition();
   const [isRemoving, startRemove] = useTransition();
+  const [configureOpen, setConfigureOpen] = useState(false);
 
   const handleToggle = () => {
     startToggle(async () => {
@@ -118,6 +120,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
         </button>
 
         <button
+          onClick={() => setConfigureOpen(true)}
           className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-50 transition-colors duration-150"
           aria-label="Configure repository"
         >
@@ -135,6 +138,23 @@ export default function RepoCard({ repo }: RepoCardProps) {
           <span className="hidden sm:inline">Remove</span>
         </button>
       </div>
+
+      {configureOpen && (
+        <ConfigureRepoModal
+          repo={{
+            id: repo.id,
+            full_name: repo.full_name ?? "",
+            doc_mode: repo.doc_mode as "internal" | "public" | "both",
+            doc_paths: repo.doc_paths,
+          }}
+          isOpen={configureOpen}
+          onClose={() => setConfigureOpen(false)}
+          onSave={() => {
+            setConfigureOpen(false);
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 }
