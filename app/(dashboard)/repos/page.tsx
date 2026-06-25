@@ -37,7 +37,9 @@ export default async function ReposPage({
     full_name: r.full_name,
     github_repo_id: r.github_repo_id,
     is_active: r.is_active,
-    doc_paths: r.doc_paths,
+    doc_paths: Array.isArray(r.doc_paths)
+      ? (r.doc_paths as string[])
+      : ["README.md"],
     doc_mode: r.doc_mode,
   }));
 

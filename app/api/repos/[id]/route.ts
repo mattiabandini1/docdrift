@@ -4,12 +4,15 @@ import { z } from "zod";
 import { PLAN_LIMITS } from "@/lib/plans";
 
 const patchSchema = z.object({
-  is_active: z.boolean(),
+  is_active: z.boolean().optional(),
+  doc_mode: z.enum(["internal", "public", "both"]).optional(),
+  doc_paths: z.array(z.string().min(1)).min(1).optional(),
 });
 
 /**
- * PATCH /api/repos/[id] — Toggle the active state of a connected repo.
- * Validates that the repo belongs to the authenticated user before updating.
+ * PATCH /api/repos/[id] — Update a connected repo's settings
+ * (is_active, doc_mode, doc_paths). Validates ownership, enforces
+ * plan limits on activation, and applies only the provided fields.
  */
 export async function PATCH(
   request: Request,
@@ -70,7 +73,7 @@ export async function PATCH(
   }
 
   // Plan enforcement: check repo limit when activating
-  if (parsed.data.is_active) {
+  if (parsed.data.is_active === true) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("plan")
@@ -97,10 +100,15 @@ export async function PATCH(
     }
   }
 
-  // Update is_active
+  // Build update payload from all provided fields
+  const updateData: Record<string, unknown> = {};
+  if (parsed.data.is_active !== undefined) updateData.is_active = parsed.data.is_active;
+  if (parsed.data.doc_mode !== undefined) updateData.doc_mode = parsed.data.doc_mode;
+  if (parsed.data.doc_paths !== undefined) updateData.doc_paths = parsed.data.doc_paths;
+
   const { error: updateError } = await supabase
     .from("repos")
-    .update({ is_active: parsed.data.is_active })
+    .update(updateData)
     .eq("id", id);
 
   if (updateError) {
@@ -111,7 +119,7 @@ export async function PATCH(
   }
 
   return NextResponse.json({
-    data: { id, is_active: parsed.data.is_active },
+    data: { id, ...updateData },
   });
 }
 
