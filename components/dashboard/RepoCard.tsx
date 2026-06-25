@@ -66,7 +66,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
   };
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface-card p-4 transition-colors duration-150 hover:border-border-strong">
+    <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4 transition-colors duration-150 hover:bg-zinc-900/50 hover:border-zinc-700">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-3">
           <span className="truncate text-sm font-semibold text-text-primary">
@@ -94,10 +94,10 @@ export default function RepoCard({ repo }: RepoCardProps) {
         <button
           onClick={handleToggle}
           disabled={isToggling}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-colors duration-150 ${
-                active
-                  ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
-                  : "bg-surface-elevated text-text-secondary hover:bg-surface-hover hover:text-text-primary"
+          className={`inline-flex items-center gap-1.5 text-xs font-medium rounded-md px-2.5 py-1 transition-colors duration-150 ${
+            active
+              ? "text-green-400 bg-green-500/10 border border-green-500/20"
+              : "text-zinc-500 bg-zinc-800 border border-zinc-700"
           }`}
         >
           {isToggling ? (
@@ -116,7 +116,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
         </button>
 
         <button
-          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-text-tertiary transition-colors duration-150 hover:bg-surface-elevated hover:text-text-secondary"
+          className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-50 transition-colors duration-150"
           aria-label="Configure repository"
         >
           <Settings className="h-3.5 w-3.5" />
@@ -126,7 +126,7 @@ export default function RepoCard({ repo }: RepoCardProps) {
         <button
           onClick={handleRemove}
           disabled={isRemoving}
-          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold text-text-tertiary transition-colors duration-150 hover:bg-accent-red-soft hover:text-accent-red"
+          className="inline-flex items-center gap-1.5 text-xs text-red-500/70 hover:text-red-400 transition-colors duration-150"
           aria-label="Remove repository"
         >
           <Trash2 className="h-3.5 w-3.5" />

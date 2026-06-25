@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { GitBranch } from "lucide-react";
 
 /**
  * Minimal login page that initiates GitHub OAuth via Supabase Auth.
@@ -22,18 +23,32 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-full flex-col items-center justify-center bg-surface-page px-6 py-12">
-      <div className="w-full max-w-sm space-y-6 rounded-lg border border-border-subtle bg-surface-card p-8 text-center">
-        <h1 className="text-2xl font-semibold tracking-tight text-text-primary">
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.04)_0%,transparent_70%)] bg-zinc-950 px-6 py-12">
+      <div className="w-full max-w-sm space-y-6 rounded-lg border border-zinc-800 bg-zinc-900 p-8 text-center">
+        <div className="flex items-center justify-center gap-2">
+          <GitBranch className="h-5 w-5 text-blue-500" />
+          <span className="text-base font-semibold text-zinc-50">DocDrift</span>
+        </div>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">
           Sign in to DocDrift
         </h1>
         <button
           type="button"
           onClick={handleLogin}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-text-primary px-4 py-3 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-zinc-50 px-4 py-3 text-sm font-medium text-zinc-900 transition-colors duration-150 hover:bg-zinc-200"
         >
           Continue with GitHub
         </button>
+        <p className="text-xs text-zinc-500">
+          By signing in, you agree to our{" "}
+          <a href="/terms" className="underline hover:text-zinc-300">
+            Terms
+          </a>{" "}
+          and{" "}
+          <a href="/privacy" className="underline hover:text-zinc-300">
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );

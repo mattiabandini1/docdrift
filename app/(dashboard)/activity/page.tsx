@@ -248,16 +248,14 @@ export default async function ActivityPage({
                     </td>
                     <td className="px-4 py-3">
                       {item.status === "error" && item.error_message ? (
-                        <div className="flex max-w-48 items-center">
-                          <span
-                            className="truncate text-xs font-semibold text-accent-red"
-                            title={item.error_message}
-                          >
-                            {item.error_message}
-                          </span>
-                        </div>
+                        <span
+                          className="inline-block max-w-[200px] truncate rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-xs text-red-400 cursor-help"
+                          title={item.error_message}
+                        >
+                          {item.error_message}
+                        </span>
                       ) : (
-                        <span className="text-text-tertiary">—</span>
+                        <span className="text-zinc-600">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-right text-text-tertiary">

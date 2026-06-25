@@ -22,9 +22,11 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-surface-page">
-      <Sidebar email={data.user.email} />
-      <main className="flex-1 overflow-auto">
-        <div className="mx-auto max-w-4xl px-8 py-10">{children}</div>
+      <div className="hidden md:flex">
+        <Sidebar email={data.user.email} />
+      </div>
+      <main className="flex-1 overflow-auto md:ml-0">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-8 sm:py-10">{children}</div>
       </main>
     </div>
   );

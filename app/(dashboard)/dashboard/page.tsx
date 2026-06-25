@@ -124,7 +124,7 @@ export default async function DashboardPage({
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           <StatCard
             label="Connected Repos"
             value={activeRepos}
@@ -238,14 +238,14 @@ function StatCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface-card p-4">
+    <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 p-4">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+        <p className="text-xs text-zinc-500 uppercase tracking-wide">
           {label}
         </p>
-        <p className="mt-1 text-2xl font-semibold text-text-primary">{value}</p>
+        <p className="mt-1 text-3xl font-semibold text-zinc-50">{value}</p>
       </div>
-      <div className="rounded-md bg-surface-elevated p-2">{icon}</div>
+      <div className="rounded-md bg-zinc-800 p-2">{icon}</div>
     </div>
   );
 }

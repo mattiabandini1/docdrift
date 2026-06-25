@@ -15,7 +15,7 @@ export default function Homepage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative overflow-hidden pt-48 pb-40 text-center">
+      <section className="relative overflow-hidden pt-28 pb-16 text-center">
         <div
           className="pointer-events-none absolute inset-0 -top-24"
           style={{
@@ -25,8 +25,8 @@ export default function Homepage() {
         />
         <div className="relative mx-auto max-w-6xl px-6">
           {/* Eyebrow */}
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent-blue" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-accent-blue/15 bg-accent-blue/[0.03] backdrop-blur-sm px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-accent-blue shadow-[0_0_20px_rgba(59,130,246,0.06)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent-blue shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
             Now in public beta
           </span>
 
@@ -39,14 +39,14 @@ export default function Homepage() {
           </h1>
 
           {/* Subheadline */}
-          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-text-secondary">
+          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-zinc-300">
             DocDrift watches your GitHub PRs and automatically opens a
             documentation PR every time your code changes. No more stale
             READMEs.
           </p>
 
           {/* CTAs */}
-          <div className="mt-10 flex items-center justify-center gap-3">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/login"
               className="inline-flex items-center rounded-md bg-text-primary px-6 py-2.5 text-sm font-semibold text-surface-page transition-colors duration-150 hover:bg-zinc-200"
@@ -65,7 +65,7 @@ export default function Homepage() {
           </p>
 
           {/* Terminal mockup */}
-          <div className="mx-auto mt-16 max-w-2xl overflow-hidden rounded-lg border border-border-subtle bg-surface-card">
+          <div className="mx-auto mt-16 max-w-xl overflow-hidden rounded-lg border border-border-subtle bg-surface-card shadow-[0_0_80px_rgba(59,130,246,0.08)]">
             <div className="flex items-center gap-1.5 border-b border-border-subtle px-4 py-3">
               <div className="h-3 w-3 rounded-full bg-accent-red" />
               <div className="h-3 w-3 rounded-full bg-yellow-400/80" />
@@ -109,7 +109,7 @@ export default function Homepage() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-40">
+      <section id="how-it-works" className="py-16">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
             How it works
@@ -176,7 +176,7 @@ export default function Homepage() {
       </section>
 
       {/* Problem / Solution */}
-      <section className="py-40">
+      <section className="py-16">
         <div className="mx-auto max-w-6xl px-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
             Why DocDrift
@@ -196,7 +196,7 @@ export default function Homepage() {
                   "New team members get lost in outdated docs",
                   "Documentation debt compounds silently",
                 ].map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <li key={text} className="flex items-start gap-3 text-sm text-zinc-300">
                     <X className="mt-0.5 h-4 w-4 shrink-0 text-accent-red" />
                     {text}
                   </li>
@@ -214,7 +214,7 @@ export default function Homepage() {
                   "You stay in control — review before merging",
                   "Documentation stays accurate, always",
                 ].map((text) => (
-                  <li key={text} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <li key={text} className="flex items-start gap-3 text-sm text-zinc-300">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent-green" />
                     {text}
                   </li>
@@ -226,15 +226,15 @@ export default function Homepage() {
       </section>
 
       {/* Pricing preview */}
-      <section className="py-40">
-        <div className="mx-auto max-w-5xl px-6">
+      <section className="py-16">
+        <div className="mx-auto max-w-6xl px-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent-blue">
             Pricing
           </p>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight text-text-primary">
             Simple pricing. No surprises.
           </h2>
-          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Free */}
             <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
               <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">
@@ -246,7 +246,7 @@ export default function Homepage() {
                   /month
                 </span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">
+              <p className="mt-2 text-sm text-zinc-300">
                 Perfect for trying DocDrift
               </p>
               <ul className="mt-5 flex-1 space-y-2">
@@ -262,9 +262,9 @@ export default function Homepage() {
                     {included ? (
                       <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
                     ) : (
-                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-text-tertiary" />
+                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-zinc-600" />
                     )}
-                    <span className={included ? "text-text-primary" : "text-text-tertiary"}>
+                    <span className={included ? "text-zinc-200" : "text-zinc-500"}>
                       {text}
                     </span>
                   </li>
@@ -279,7 +279,7 @@ export default function Homepage() {
             </div>
 
             {/* Starter */}
-            <div className="flex flex-col rounded-lg border border-border-strong bg-surface-card p-5">
+            <div className="flex flex-col rounded-lg border border-accent-blue/25 bg-surface-card p-5 shadow-[0_0_40px_rgba(59,130,246,0.05)]">
               <span className="inline-flex w-fit items-center rounded-full border border-accent-blue/20 bg-accent-blue/10 px-2.5 py-0.5 text-xs font-semibold text-accent-blue">
                 Most popular
               </span>
@@ -289,7 +289,7 @@ export default function Homepage() {
                   /month
                 </span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">
+              <p className="mt-2 text-sm text-zinc-300">
                 For active solo developers
               </p>
               <ul className="mt-5 flex-1 space-y-2">
@@ -304,9 +304,9 @@ export default function Homepage() {
                     {included ? (
                       <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
                     ) : (
-                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-text-tertiary" />
+                      <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-zinc-600" />
                     )}
-                    <span className={included ? "text-text-primary" : "text-text-tertiary"}>
+                    <span className={included ? "text-zinc-200" : "text-zinc-500"}>
                       {text}
                     </span>
                   </li>
@@ -334,7 +334,7 @@ export default function Homepage() {
                   /month
                 </span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">
+              <p className="mt-2 text-sm text-zinc-300">
                 For teams and power users
               </p>
               <ul className="mt-5 flex-1 space-y-2">
@@ -348,7 +348,7 @@ export default function Homepage() {
                 ].map((text) => (
                   <li key={text} className="flex items-start gap-3 text-sm leading-snug">
                     <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
-                    <span className="text-text-primary">{text}</span>
+                    <span className="text-zinc-200">{text}</span>
                   </li>
                 ))}
               </ul>

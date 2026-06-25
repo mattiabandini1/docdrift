@@ -53,13 +53,15 @@ export default async function SettingsPage() {
       {/* Section 1 — Account */}
       <section className="space-y-4">
         <h2 className="text-sm font-semibold text-text-primary">Account</h2>
-        <div className="rounded-lg border border-border-subtle bg-surface-card p-4">
-          <div className="flex items-center justify-between">
+        <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
+          <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">Email address</p>
-              <p className="mt-0.5 text-sm text-text-primary">{email}</p>
+              <p className="text-xs text-zinc-500 uppercase tracking-wide mb-1">
+                Email address
+              </p>
+              <p className="text-sm text-zinc-50">{email}</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-end gap-1.5">
               <span
                 className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${planBadge}`}
               >
@@ -68,7 +70,7 @@ export default async function SettingsPage() {
               {plan === "free" && (
                 <Link
                   href="/pricing"
-                  className="text-xs font-semibold text-text-secondary underline hover:text-text-primary"
+                  className="text-xs font-semibold text-zinc-400 underline hover:text-zinc-300"
                 >
                   Upgrade plan
                 </Link>

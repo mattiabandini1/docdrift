@@ -29,7 +29,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Free */}
             <div className="flex flex-col rounded-lg border border-border-subtle bg-surface-card p-5">
               <span className="inline-flex w-fit items-center rounded-full border border-border-subtle bg-surface-elevated px-2.5 py-0.5 text-xs font-medium text-text-secondary">
@@ -38,7 +38,7 @@ export default function PricingPage() {
               <p className="mt-5 text-5xl font-bold tracking-tight">
                 $0<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">Perfect for trying DocDrift</p>
+              <p className="mt-2 text-sm text-zinc-300">Perfect for trying DocDrift</p>
               <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "1 repository", ok: true },
@@ -50,8 +50,8 @@ export default function PricingPage() {
                   { text: "Priority support", ok: false },
                 ].map(({ text, ok }) => (
                   <li key={text} className="flex items-start gap-3 text-sm leading-snug">
-                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-text-tertiary"}`} />
-                    <span className={ok ? "text-text-primary" : "text-text-tertiary"}>{text}</span>
+                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-zinc-600"}`} />
+                    <span className={ok ? "text-zinc-200" : "text-zinc-500"}>{text}</span>
                   </li>
                 ))}
               </ul>
@@ -64,14 +64,14 @@ export default function PricingPage() {
             </div>
 
             {/* Starter */}
-            <div className="flex flex-col rounded-lg border border-border-strong bg-surface-card p-5">
+            <div className="flex flex-col rounded-lg border border-accent-blue/25 bg-surface-card p-5 shadow-[0_0_40px_rgba(59,130,246,0.05)]">
               <span className="inline-flex w-fit items-center rounded-full border border-accent-blue/20 bg-accent-blue/10 px-2.5 py-0.5 text-xs font-semibold text-accent-blue">
                 Most popular
               </span>
               <p className="mt-5 text-5xl font-bold tracking-tight">
                 $12<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">For active solo developers</p>
+              <p className="mt-2 text-sm text-zinc-300">For active solo developers</p>
               <ul className="mt-5 flex-1 space-y-2">
                 {[
                   { text: "3 repositories", ok: true },
@@ -82,8 +82,8 @@ export default function PricingPage() {
                   { text: "Priority support", ok: false },
                 ].map(({ text, ok }) => (
                   <li key={text} className="flex items-start gap-3 text-sm leading-snug">
-                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-text-tertiary"}`} />
-                    <span className={ok ? "text-text-primary" : "text-text-tertiary"}>{text}</span>
+                    <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${ok ? "text-accent-green" : "text-zinc-600"}`} />
+                    <span className={ok ? "text-zinc-200" : "text-zinc-500"}>{text}</span>
                   </li>
                 ))}
               </ul>
@@ -101,7 +101,7 @@ export default function PricingPage() {
               <p className="mt-5 text-5xl font-bold tracking-tight">
                 $29<span className="ml-1 text-lg font-medium text-text-tertiary">/month</span>
               </p>
-              <p className="mt-2 text-sm text-text-secondary">For teams and power users</p>
+              <p className="mt-2 text-sm text-zinc-300">For teams and power users</p>
               <ul className="mt-5 flex-1 space-y-2">
                 {[
                   "Unlimited repositories",
@@ -113,7 +113,7 @@ export default function PricingPage() {
                 ].map((text) => (
                   <li key={text} className="flex items-start gap-3 text-sm leading-snug">
                     <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent-green" />
-                    <span className="text-text-primary">{text}</span>
+                    <span className="text-zinc-200">{text}</span>
                   </li>
                 ))}
               </ul>

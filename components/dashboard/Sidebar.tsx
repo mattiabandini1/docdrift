@@ -32,10 +32,10 @@ export default function Sidebar({ email }: SidebarProps) {
   };
 
   return (
-    <aside className="flex w-56 shrink-0 flex-col border-r border-border-subtle bg-surface-card">
+    <aside className="flex w-56 shrink-0 flex-col border-r border-border-subtle bg-surface-card overflow-visible">
       <div className="flex flex-col gap-0.5 border-b border-border-subtle px-4 py-4">
-        <span className="text-sm font-semibold text-text-primary">DocDrift</span>
-        <span className="text-xs text-text-tertiary">docs that keep up</span>
+        <span className="text-sm font-semibold text-text-primary whitespace-nowrap">DocDrift</span>
+        <span className="text-xs text-text-tertiary whitespace-nowrap">docs that keep up</span>
       </div>
 
       <nav className="flex-1 space-y-1 p-2">
@@ -63,7 +63,7 @@ export default function Sidebar({ email }: SidebarProps) {
         <p className="max-w-full truncate text-xs text-text-tertiary">{email}</p>
         <button
           onClick={handleSignOut}
-          className="mt-1.5 text-xs text-text-tertiary transition-colors duration-150 hover:text-text-secondary"
+          className="mt-1.5 text-sm text-zinc-400 hover:text-zinc-50 transition-colors duration-150"
         >
           Sign out
         </button>
