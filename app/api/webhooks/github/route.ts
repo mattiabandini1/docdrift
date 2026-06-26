@@ -298,21 +298,21 @@ export async function POST(request: Request): Promise<Response> {
       let fileUpdated = false;
 
       for (const matchResult of topSections) {
-        const generated = await generateDocUpdate({
+        const result = await generateDocUpdate({
           diff: diffText,
           currentDoc: matchResult.section.content,
           docPath: docFile.path,
           docMode,
         });
 
-        if (generated === null) {
+        if (result.text === null) {
           continue;
         }
 
         workingContent = replaceSection(
           workingContent,
           matchResult.section.content,
-          generated,
+          result.text,
           matchResult.section.startIndex
         );
 
