@@ -38,3 +38,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## AI Model
 For the first, second and third -> gemini-2.5-flash-lite
 Then -> gemini-2.5-flash
+
+## AI Model
+For the first, second and third -> gemini-2.5-flash-lite
+Then -> gemini-2.5-flash
