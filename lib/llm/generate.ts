@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import { buildPrompt, SYSTEM_PROMPT, type PromptParams } from "./prompts";
 
 /** The Gemini model ID to use for documentation generation. */
-export const MODEL = "gemini-2.5-flash-lite";
+export const MODEL = "gemini-2.5-flash";
 
 export type GenerateParams = PromptParams;
 
