@@ -53,8 +53,7 @@ When a PR is merged, DocDrift:
 DocDrift only updates documentation when it detects a real gap between
 what your code does and what your docs say. If no relevant sections are
 found, or if the documentation is already accurate, no PR is opened.
-
-## Webhook Pipeline
+T## Webhook Pipeline
 
 The pipeline is triggered by GitHub webhook events on `pull_request`
 with action `closed` and `merged: true`.
@@ -63,5 +62,7 @@ Each event goes through:
 - HMAC-SHA256 signature verification
 - Rate limiting (10 requests/minute per IP)
 - Plan enforcement (repo limits and monthly update limits)
+- Skipping PRs opened by DocDrift itself to prevent infinite loops.
 - Semantic matching between the diff and your documentation
+- AI-powered documentation generation via Gemini Flashff and your documentation
 - AI-powered documentation generation via Gemini Flash
