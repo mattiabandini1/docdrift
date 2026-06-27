@@ -39,6 +39,29 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 For the first, second and third -> gemini-2.5-flash-lite
 Then -> gemini-2.5-flash
 
-## AI Model
-For the first, second and third -> gemini-2.5-flash-lite
-Then -> gemini-2.5-flash
+## How It Works
+
+DocDrift monitors every Pull Request merged into your `main` branch.
+When a PR is merged, DocDrift:
+
+1. Extracts the diff of all files changed in the PR
+2. Fetches the documentation files you configured (default: `README.md`)
+3. Uses semantic search to find documentation sections related to the changes
+4. Generates an updated version of those sections using AI
+5. Opens a new Pull Request with the documentation changes for your review
+
+DocDrift only updates documentation when it detects a real gap between
+what your code does and what your docs say. If no relevant sections are
+found, or if the documentation is already accurate, no PR is opened.
+
+## Webhook Pipeline
+
+The pipeline is triggered by GitHub webhook events on `pull_request`
+with action `closed` and `merged: true`.
+
+Each event goes through:
+- HMAC-SHA256 signature verification
+- Rate limiting (10 requests/minute per IP)
+- Plan enforcement (repo limits and monthly update limits)
+- Semantic matching between the diff and your documentation
+- AI-powered documentation generation via Gemini Flash
