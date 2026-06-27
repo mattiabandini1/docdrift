@@ -188,6 +188,27 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ status: "skipped", reason: "pr_not_merged" });
   }
 
+  // Skip PRs opened by DocDrift itself to prevent infinite loops
+  const prHeadRef: string = payload.pull_request.head.ref ?? "";
+  const prAuthorLogin: string = payload.pull_request.user?.login ?? "";
+
+  if (prHeadRef.startsWith("docdrift/")) {
+    return Response.json({
+      status: "skipped",
+      reason: "docdrift_own_pr",
+    });
+  }
+
+  if (
+    prAuthorLogin.includes("[bot]") &&
+    prAuthorLogin.toLowerCase().includes("docdrift")
+  ) {
+    return Response.json({
+      status: "skipped",
+      reason: "docdrift_own_pr",
+    });
+  }
+
   // --- Step 3: Load repo from DB ---
   const supabase = createServiceClient();
 
@@ -269,6 +290,9 @@ export async function POST(request: Request): Promise<Response> {
   // --- Step 6: Run the core pipeline ---
   try {
     const diff = await extractDiff(owner, repoName, prNumber, installationId);
+
+    const modifiedFilePaths = new Set(diff.files.map((f) => f.filename));
+
     const docFiles: DocFile[] = await fetchDocContent(
       owner,
       repoName,
@@ -280,6 +304,9 @@ export async function POST(request: Request): Promise<Response> {
     const updatedFiles: UpdatedFile[] = [];
 
     for (const docFile of docFiles) {
+      if (modifiedFilePaths.has(docFile.path)) {
+        continue;
+      }
       const impactedSections = await findImpactedSections(
         diffText,
         docFile.content
@@ -303,6 +330,7 @@ export async function POST(request: Request): Promise<Response> {
           currentDoc: matchResult.section.content,
           docPath: docFile.path,
           docMode,
+          modifiedFiles: diff.files.map((f) => f.filename),
         });
 
         if (result.text === null) {

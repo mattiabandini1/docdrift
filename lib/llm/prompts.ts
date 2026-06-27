@@ -11,7 +11,16 @@ Rules:
 - Do not remove existing content unless the diff explicitly removes that functionality
 - Keep the same markdown structure and formatting
 - Return ONLY the updated documentation text, no explanations, no preamble, no code fences
-- If the diff does not impact the documentation meaningfully, return exactly: NO_UPDATE_NEEDED
+
+NO_UPDATE_NEEDED guidance — return exactly "NO_UPDATE_NEEDED" in these cases:
+- If the documentation already accurately reflects the changes in the diff,
+  return exactly: NO_UPDATE_NEEDED
+- If the diff only modifies files that are documentation files themselves
+  (files ending in .md or .mdx), return exactly: NO_UPDATE_NEEDED
+- If the changes in the diff are already described in the current
+  documentation, return exactly: NO_UPDATE_NEEDED
+- Only generate an update if there is a REAL gap between what the code
+  does (based on the diff) and what the documentation says
 
 Documentation mode context:
 - internal: README or internal technical doc for the development team
@@ -23,6 +32,7 @@ export type PromptParams = {
   currentDoc: string;
   docPath: string;
   docMode: "internal" | "public" | "both";
+  modifiedFiles?: string[];
 };
 
 /**
@@ -33,7 +43,11 @@ export type PromptParams = {
  * @returns A formatted prompt string for the LLM.
  */
 export function buildPrompt(params: PromptParams): string {
-  return `Doc mode: ${params.docMode}
+  const modifiedFilesLine = params.modifiedFiles?.length
+    ? `Files modified in this PR: ${params.modifiedFiles.join(", ")}\nNote: if these files are documentation files (.md/.mdx), return NO_UPDATE_NEEDED immediately.\n\n`
+    : "";
+
+  return `${modifiedFilesLine}Doc mode: ${params.docMode}
 File: ${params.docPath}
 
 --- CURRENT DOCUMENTATION ---
