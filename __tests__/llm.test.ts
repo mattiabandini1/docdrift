@@ -171,7 +171,7 @@ describe("generateDocUpdate", () => {
 
     const result = await generateDocUpdate({
       diff: "diff",
-      currentDoc: "old",
+      currentDoc: "original documentation that is long enough",
       docPath: "README.md",
       docMode: "internal",
     });
@@ -190,7 +190,7 @@ describe("generateDocUpdate", () => {
 
     const result = await generateDocUpdate({
       diff: "diff",
-      currentDoc: "old",
+      currentDoc: "original document",
       docPath: "README.md",
       docMode: "internal",
     });
@@ -210,7 +210,7 @@ describe("generateDocUpdate", () => {
 
     const result = await generateDocUpdate({
       diff: "diff",
-      currentDoc: "old",
+      currentDoc: "original documentation",
       docPath: "README.md",
       docMode: "internal",
     });
@@ -270,5 +270,40 @@ describe("generateDocUpdate", () => {
     ).rejects.toThrow(/LLM_UNAVAILABLE/);
 
     expect(generateContentMock).toHaveBeenCalledTimes(4);
+  });
+
+  it("returns null when LLM output has corrupted heading (spurious chars)", async () => {
+    generateContentMock.mockResolvedValueOnce(
+      makeResponseWithText("T## My Heading\nsome content")
+    );
+
+    const result = await generateDocUpdate({
+      diff: "diff",
+      currentDoc: "## My Heading\nsome content",
+      docPath: "README.md",
+      docMode: "internal",
+    });
+
+    expect(result.text).toBeNull();
+    expect(result.model).toBe(PRIMARY_MODEL);
+  });
+
+  it("returns null when LLM output is more than 50% longer than input", async () => {
+    const currentDoc = "## Short";
+    const longResponse = currentDoc.repeat(10);
+
+    generateContentMock.mockResolvedValueOnce(
+      makeResponseWithText(longResponse)
+    );
+
+    const result = await generateDocUpdate({
+      diff: "diff",
+      currentDoc,
+      docPath: "README.md",
+      docMode: "internal",
+    });
+
+    expect(result.text).toBeNull();
+    expect(result.model).toBe(PRIMARY_MODEL);
   });
 });
