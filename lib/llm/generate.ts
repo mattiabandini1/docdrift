@@ -7,6 +7,7 @@ export const FALLBACK_MODEL = "gemini-2.5-flash";
 
 const MAX_RETRIES = 2;
 const BASE_DELAY_MS = 1000;
+const LLM_TIMEOUT_MS = 30_000;
 
 export interface GenerateParams {
   diff: string;
@@ -88,13 +89,22 @@ async function attemptModel(
   prompt: string,
   currentDoc: string
 ): Promise<string | null> {
-  const result = await client.models.generateContent({
-    model,
-    contents: prompt,
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-    },
-  });
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(
+      () => reject(new Error("LLM_TIMEOUT: request exceeded 30 seconds")),
+      LLM_TIMEOUT_MS
+    )
+  );
+  const result = await Promise.race([
+    client.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        systemInstruction: SYSTEM_PROMPT,
+      },
+    }),
+    timeoutPromise,
+  ]);
 
   const trimmed = result.text?.trim() ?? "";
 
