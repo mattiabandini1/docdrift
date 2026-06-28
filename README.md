@@ -54,6 +54,7 @@ DocDrift only updates documentation when it detects a real gap between
 what your code does and what your docs say. If no relevant sections are
 found, or if the documentation is already accurate, no PR is opened.
 
+```markdown
 ## Webhook Pipeline
 
 The pipeline is triggered by GitHub webhook events on `pull_request`
@@ -65,3 +66,5 @@ Each event goes through:
 - Plan enforcement (repo limits and monthly update limits)
 - Semantic matching between the diff and your documentation
 - AI-powered documentation generation via Gemini Flash
+
+```
